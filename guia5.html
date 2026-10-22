@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 5 · Simulación de Monte Carlo</title>
+<style>
+:root{--fondo:#f6f5f1;--papel:#fff;--tinta:#1f2328;--suave:#5b6370;--linea:#d5d2c8;--acento:#1d4e89;--acento-suave:#e3ecf7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
+.volver{font-size:.9rem;color:var(--acento);text-decoration:none}
+.materia{color:var(--suave);font-size:.95rem;margin:16px 0 0}
+h1{font-size:1.7rem;margin:4px 0 4px}
+.sub{color:var(--suave);margin:0 0 28px}
+.lista{display:grid;gap:12px}
+.caja{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:16px 18px}
+.num{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--acento);color:#fff;font-size:.95rem;font-weight:600}
+.tit{font-weight:600}
+a.caja{border-color:var(--acento);background:var(--acento-suave)}
+a.caja:hover{background:#d3e2f4}
+.caja.off{color:var(--suave);background:transparent;border-style:dashed}
+.caja.off .num{background:var(--linea);color:var(--suave)}
+.caja.off .tit{font-weight:400}
+</style></head>
+<body><main>
+  <a class="volver" href="index.html">← Todas las guías</a>
+  <p class="materia">Investigación Operativa · Universidad de San Andrés</p>
+  <h1>Guía 5: Simulación de Monte Carlo</h1>
+  <p class="sub">Cátedra Severino</p>
+
+  <div class="lista">
+    <div class="caja off"><span class="num">1</span><span class="tit">Las entradas de la reventa</span></div>
+    <div class="caja off"><span class="num">2</span><span class="tit">Cuántas entradas comprar</span></div>
+    <div class="caja off"><span class="num">3</span><span class="tit">El seguro de salud de la empresa</span></div>
+    <div class="caja off"><span class="num">4</span><span class="tit">La prima de la cartera</span></div>
+    <div class="caja off"><span class="num">5</span><span class="tit">El lanzamiento contra la competencia</span></div>
+    <div class="caja off"><span class="num">6</span><span class="tit">Los pedidos de la tienda online</span></div>
+    <div class="caja off"><span class="num">7</span><span class="tit">El overbooking del vuelo a Córdoba</span></div>
+    <div class="caja off"><span class="num">8</span><span class="tit">El hotel y el centro comercial</span></div>
+    <div class="caja off"><span class="num">9</span><span class="tit">La caja de las residencias</span></div>
+    <div class="caja off"><span class="num">10</span><span class="tit">El edificio de la escuela de ingeniería</span></div>
+  </div>
+</main></body></html>
