@@ -9,41 +9,31 @@ main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
 .materia{color:var(--suave);font-size:.95rem;margin:0}
 h1{font-size:1.7rem;margin:4px 0 4px}
 .sub{color:var(--suave);margin:0 0 28px}
-section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
-h2{font-size:1.1rem;margin:0 0 10px}
-ol{margin:0;padding-left:1.4rem}
-li{padding:3px 0}
-a{color:var(--acento)}
-.plantilla{display:block;text-decoration:none;color:inherit;background:var(--acento-suave);border:1px solid var(--acento);border-radius:8px;padding:14px 16px}
-.plantilla b{color:var(--acento);display:block}
-.plantilla span{font-size:.92rem;color:var(--suave)}
+.lista{display:grid;gap:12px}
+.caja{display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:16px 18px}
+.num{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--acento);color:#fff;font-size:.95rem;font-weight:600}
+.tit{font-weight:600}
+a.caja{border-color:var(--acento);background:var(--acento-suave)}
+a.caja:hover{background:#d3e2f4}
+.caja.off{color:var(--suave);background:transparent;border-style:dashed}
+.caja.off .num{background:var(--linea);color:var(--suave)}
+.caja.off .tit{font-weight:400}
 </style></head>
 <body><main>
   <p class="materia">Investigación Operativa · Universidad de San Andrés</p>
   <h1>Guía 6: Simulación por próximo evento</h1>
   <p class="sub">Cátedra Severino</p>
 
-  <section>
-    <h2>Los problemas</h2>
-    <ol>
-      <li>La dársena de descarga</li>
-      <li>La dársena, evento por evento</li>
-      <li>Cuántos días hay que simular</li>
-      <li>El taller de service de motos</li>
-      <li>Los mostradores de check-in</li>
-      <li>Las máquinas y el técnico</li>
-      <li>El depósito de la ferretería</li>
-      <li>La mesa de ayuda IT</li>
-      <li>La guardia de la clínica</li>
-      <li>El depósito con dársena</li>
-    </ol>
-  </section>
-
-  <section>
-    <h2>Plantilla interactiva</h2>
-    <a class="plantilla" href="g6_p1_darsena.html">
-      <b>Problema 1: la dársena de descarga</b>
-      <span>Ítem a): completá la plantilla de diseño y el diagrama de flujo, y guardalo en PDF.</span>
-    </a>
-  </section>
+  <div class="lista">
+    <a class="caja" href="g6_p1_darsena.html"><span class="num">1</span><span class="tit">La dársena de descarga</span></a>
+    <div class="caja off"><span class="num">2</span><span class="tit">La dársena, evento por evento</span></div>
+    <div class="caja off"><span class="num">3</span><span class="tit">Cuántos días hay que simular</span></div>
+    <div class="caja off"><span class="num">4</span><span class="tit">El taller de service de motos</span></div>
+    <div class="caja off"><span class="num">5</span><span class="tit">Los mostradores de check-in</span></div>
+    <div class="caja off"><span class="num">6</span><span class="tit">Las máquinas y el técnico</span></div>
+    <div class="caja off"><span class="num">7</span><span class="tit">El depósito de la ferretería</span></div>
+    <div class="caja off"><span class="num">8</span><span class="tit">La mesa de ayuda IT</span></div>
+    <div class="caja off"><span class="num">9</span><span class="tit">La guardia de la clínica</span></div>
+    <div class="caja off"><span class="num">10</span><span class="tit">El depósito con dársena</span></div>
+  </div>
 </main></body></html>
