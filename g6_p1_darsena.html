@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 6 · Problema 1 · Diseño</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
+.enun{font-size:.95rem}
+.ident{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-weight:600;font-size:.92rem;display:block;margin-bottom:4px}
+.ayuda{font-weight:400;color:var(--suave);font-size:.85rem;display:block}
+input,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.casillero{margin-bottom:14px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:10px;border:1px dashed var(--linea);border-radius:8px;min-height:52px}
+.ficha{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--acento);border-radius:999px;cursor:grab}
+.ficha.elegida{background:var(--acento);color:#fff}
+.ficha.usada{opacity:.35}
+svg{width:100%;height:auto;display:block}
+.caja{fill:#fff;stroke:#444;stroke-width:1.5}
+.hueco{fill:#fafafa;stroke:var(--acento);stroke-width:2;stroke-dasharray:6 4;cursor:pointer}
+.hueco.lleno{stroke-dasharray:none;fill:var(--acento-suave)}
+.hueco.bien{stroke:var(--ok);fill:var(--ok-suave)}
+.hueco.malo{stroke:#e3a09b;fill:var(--mal-suave)}
+.hueco.sobre{fill:#fff6d6}
+.txt{font:16px system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.etq{font:12px system-ui,sans-serif;fill:var(--suave)}
+.flecha{stroke:#444;stroke-width:1.5;fill:none;marker-end:url(#punta)}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.ver{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:#fff;color:var(--acento);cursor:pointer;margin-top:6px}
+.solucion{margin-top:8px;padding:10px 12px;background:var(--acento-suave);border-left:4px solid var(--acento);border-radius:0 6px 6px 0;font-size:.93rem}
+.solucion[hidden]{display:none}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msj{margin-top:10px;font-size:.92rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+#comprobante{display:none}
+@media (max-width:600px){.ident{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main>*:not(#comprobante){display:none!important}
+  #comprobante{display:block!important}
+  #comprobante section{border:0;padding:0;margin:0 0 12px}
+  .c-tabla{width:100%;border-collapse:collapse}
+  .c-tabla td{border:1px solid #999;padding:5px 7px;vertical-align:top;font-size:10pt}
+  .c-tabla td:first-child{width:30%;font-weight:600}
+  .c-pie{font-size:9pt;color:#444;margin-top:8px}
+  svg{max-height:15cm}
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Guía 6 · Problema 1 · La dársena de descarga</h1>
+  <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
+
+  <section>
+    <h2><span class="num">0</span>Para el encabezado del PDF</h2>
+    <div class="ident">
+      <div><label for="nombre">Nombre y apellido</label><input id="nombre" autocomplete="name"></div>
+      <div><label for="legajo">Grupo</label><input id="legajo"></div>
+    </div>
+  </section>
+
+  <section class="enun">
+    <h2>El problema</h2>
+    <p>Un centro de distribución recibe camiones en una única dársena de descarga, que trabaja las 24 horas. Llegan en promedio 3 camiones por hora, con tiempo entre llegadas exponencial de media 20 minutos. La descarga dura en promedio 15 minutos, también exponencial. Se descarga por orden de llegada y mientras la dársena está ocupada los camiones esperan en la playa. La simulación usa un <b>reloj de paso fijo</b> de 3 minutos.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>La plantilla de diseño</h2>
+    <p class="sub" style="margin-bottom:12px">Escribí con tus palabras, una o dos oraciones por casillero. Cuando termines un casillero, podés ver la solución y compararla con lo tuyo.</p>
+    <div id="plantilla"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>El diagrama de flujo</h2>
+    <p class="sub" style="margin-bottom:6px">Faltan las dos preguntas y las dos actualizaciones del estado. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <div class="banco" id="banco"></div>
+    <svg id="diagrama" viewBox="0 0 560 800" role="img" aria-label="Diagrama de flujo de la dársena con reloj fijo">
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <!-- cajas fijas -->
+      <rect class="caja" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42">Inicializar t = 0, N = 0</text>
+      <rect class="caja" x="150" y="100" width="220" height="44"/><text class="txt" x="260" y="122">Avanzar t ← t + Δt</text>
+      <rect class="caja" x="150" y="530" width="220" height="44"/><text class="txt" x="260" y="552">Guardar ns[k] = N</text>
+      <polygon class="caja" points="260,606 350,646 260,686 170,646"/><text class="txt" x="260" y="646">¿t &lt; T?</text>
+      <rect class="caja" x="130" y="730" width="260" height="44" rx="22"/><text class="txt" x="260" y="752">Resumen: L, ocupación, Lq, Wq</text>
+      <!-- huecos -->
+      <g class="slot" data-slot="d1"><polygon class="hueco" points="260,180 380,224 260,268 140,224"/><text class="txt" x="260" y="224"></text></g>
+      <g class="slot" data-slot="u1"><rect class="hueco" x="410" y="202" width="130" height="44"/><text class="txt" x="475" y="224"></text></g>
+      <g class="slot" data-slot="d2"><polygon class="hueco" points="260,320 400,366 260,412 120,366"/><text class="txt" x="260" y="366"></text></g>
+      <g class="slot" data-slot="u2"><rect class="hueco" x="420" y="344" width="120" height="44"/><text class="txt" x="480" y="366"></text></g>
+      <!-- flechas -->
+      <path class="flecha" d="M260 64V100"/>
+      <path class="flecha" d="M260 144V180"/>
+      <path class="flecha" d="M380 224H410"/><text class="etq" x="386" y="216">sí</text>
+      <path class="flecha" d="M260 268V320"/><text class="etq" x="268" y="290">no</text>
+      <path class="flecha" d="M475 246V296H260"/>
+      <path class="flecha" d="M400 366H420"/><text class="etq" x="402" y="358">sí</text>
+      <path class="flecha" d="M260 412V530"/><text class="etq" x="268" y="440">no</text>
+      <path class="flecha" d="M480 388V480H260"/>
+      <path class="flecha" d="M260 574V606"/>
+      <path class="flecha" d="M170 646H40V122H150"/><text class="etq" x="140" y="638">sí</text>
+      <path class="flecha" d="M260 686V730"/><text class="etq" x="268" y="708">no</text>
+    </svg>
+    <div class="fila" style="margin-top:12px">
+      <button class="accion sec" id="verificar">Verificar el diagrama</button>
+      <span class="msj" id="msjDiag"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Guardar</h2>
+    <p class="sub" style="margin-bottom:10px">En la ventana de impresión elegí <b>Guardar como PDF</b>. Lo que escribiste también queda guardado en este navegador.</p>
+    <div class="fila"><button class="accion" id="descargar">Descargar en PDF</button></div>
+  </section>
+
+  <div id="comprobante"></div>
+</main>
+
+<script>
+const ID = "g6p1";
+const CASILLEROS = [
+  ["unidad", "Unidad de flujo", "quién recorre el sistema",
+   "El camión. Es lo que llega, espera, se descarga y se va."],
+  ["estado", "Estado", "las variables que describen el sistema en cada instante, con su unidad",
+   "N(t): cantidad de camiones en el sistema, los que se descargan más los que esperan. Se mide en camiones. Con N alcanza: si N > 0, uno se está descargando y N − 1 esperan."],
+  ["eventos", "Eventos: qué cambia", "cada evento y cómo modifica el estado",
+   "Llega un camión: N sube en 1. Termina una descarga: N baja en 1. No hay más eventos."],
+  ["programa", "Qué programa y qué cancela", "qué eventos futuros dispara cada evento, y cuáles deja sin sentido (pensalo con el reloj fijo)",
+   "Nada. Con reloj fijo no hay lista de eventos futuros: en cada paso se pregunta si pasó algo. Una descarga sólo puede terminar si hay un camión descargando (N > 0)."],
+  ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea en un paso",
+   "Tiempo entre llegadas: exponencial de media 20 min (λ = 3 por hora). Duración de la descarga: exponencial de media 15 min (μ = 4 por hora). En un paso de duración Δt, cada una se vuelve una moneda: pasa con probabilidad p = 1 − e^(−λΔt), y se sortea con r < p, siendo r uniforme entre 0 y 1."],
+  ["medidas", "Medidas", "qué se acumula durante la corrida y en qué medida se convierte al final",
+   "Se guarda N al final de cada paso. Al final: L es el promedio de N, la ocupación es la fracción de pasos con N > 0, Lq es el promedio de max(N − 1, 0), y Wq = Lq / λ por Little."],
+  ["horizonte", "Horizonte y parada", "cuánto se simula y cuál es la condición para parar",
+   "100 días de 24 horas, es decir 2.400 horas. Con pasos de 3 minutos son 48.000 pasos. Se para cuando t llega a T."],
+  ["validacion", "Validación", "con qué se cruza el resultado",
+   "Con las fórmulas exactas de la cola M/M/1: ρ = λ/μ = 0,75, L = 3, Lq = 2,25 y Wq = 0,75 horas. La simulación tiene que dar valores cercanos."],
+  ["experimento", "Experimento", "qué se repite por fuera de la simulación",
+   "Se repite la corrida con distintos pasos Δt (misma semilla, mismos 100 días) para ver cuánto cambian las medidas al achicar el paso."]
+];
+const FICHAS = [
+  ["d1", "¿r < p_lleg?"], ["d2", "¿N > 0 y r < p_fin?"], ["u1", "N ← N + 1"], ["u2", "N ← N − 1"],
+  ["x1", "¿r < λ?"], ["x2", "¿N = 0?"], ["x3", "N ← 0"], ["x4", "t ← t + Exp(20)"], ["x5", "Programar la próxima llegada"]
+];
+const ORDEN = ["x4", "u2", "d2", "x1", "u1", "x5", "d1", "x3", "x2"];
+
+let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const texto = k => FICHAS.find(f => f[0] === k)[1];
+
+// identificación
+for (const k of ["nombre", "legajo"]) {
+  const el = document.getElementById(k);
+  el.value = estado[k];
+  el.addEventListener("input", () => { estado[k] = el.value; guardar(); });
+}
+
+// plantilla
+const cont = document.getElementById("plantilla");
+for (const [k, tit, ay, sol] of CASILLEROS) {
+  const d = document.createElement("div");
+  d.className = "casillero";
+  d.innerHTML = `<label for="c_${k}">${tit}<span class="ayuda">${ay}</span></label><textarea id="c_${k}"></textarea>
+    <button type="button" class="ver" aria-expanded="false">Ver solución</button>
+    <div class="solucion" hidden></div>`;
+  cont.appendChild(d);
+  const ta = d.querySelector("textarea");
+  ta.value = estado.txt[k] || "";
+  ta.addEventListener("input", () => { estado.txt[k] = ta.value; guardar(); });
+  const bv = d.querySelector(".ver"), cs = d.querySelector(".solucion");
+  cs.textContent = sol;
+  bv.addEventListener("click", () => {
+    cs.hidden = !cs.hidden;
+    bv.textContent = cs.hidden ? "Ver solución" : "Ocultar solución";
+    bv.setAttribute("aria-expanded", String(!cs.hidden));
+  });
+}
+
+// diagrama
+const banco = document.getElementById("banco");
+let elegida = null;
+function pintarBanco() {
+  banco.innerHTML = "";
+  const usadas = Object.values(estado.slots);
+  for (const k of ORDEN) {
+    const b = document.createElement("button");
+    b.className = "ficha" + (usadas.includes(k) ? " usada" : "") + (elegida === k ? " elegida" : "");
+    b.textContent = texto(k);
+    b.draggable = true;
+    b.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", k));
+    b.addEventListener("click", () => { elegida = elegida === k ? null : k; pintarBanco(); });
+    banco.appendChild(b);
+  }
+}
+function poner(slot, k) {
+  for (const s in estado.slots) if (estado.slots[s] === k) delete estado.slots[s];
+  if (k) estado.slots[slot] = k; else delete estado.slots[slot];
+  estado.verificado = false;
+  elegida = null;
+  guardar(); pintarSlots(); pintarBanco();
+  document.getElementById("msjDiag").textContent = "";
+}
+function pintarSlots(marcar) {
+  document.querySelectorAll(".slot").forEach(g => {
+    const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
+    const k = estado.slots[s];
+    t.textContent = k ? texto(k) : "";
+    h.classList.toggle("lleno", !!k);
+    h.classList.toggle("bien", !!marcar && k === s);
+    h.classList.toggle("malo", !!marcar && !!k && k !== s);
+  });
+}
+document.querySelectorAll(".slot").forEach(g => {
+  const s = g.dataset.slot, h = g.querySelector(".hueco");
+  g.addEventListener("click", () => { if (elegida) poner(s, elegida); else if (estado.slots[s]) poner(s, null); });
+  g.addEventListener("dragover", e => { e.preventDefault(); h.classList.add("sobre"); });
+  g.addEventListener("dragleave", () => h.classList.remove("sobre"));
+  g.addEventListener("drop", e => { e.preventDefault(); h.classList.remove("sobre"); poner(s, e.dataTransfer.getData("text/plain")); });
+});
+document.getElementById("verificar").addEventListener("click", () => {
+  const m = document.getElementById("msjDiag");
+  const huecos = ["d1", "d2", "u1", "u2"];
+  const llenos = huecos.filter(s => estado.slots[s]).length;
+  if (llenos === 0) { m.className = "msj mal"; m.textContent = "Todavía no pusiste ninguna ficha."; pintarSlots(); return; }
+  const buenos = huecos.filter(s => estado.slots[s] === s).length;
+  const malos = llenos - buenos, vacios = 4 - llenos;
+  pintarSlots(true);
+  estado.verificado = buenos === 4;
+  guardar();
+  m.className = "msj " + (buenos === 4 ? "ok" : "mal");
+  m.textContent = buenos === 4 ? "Diagrama correcto." :
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué se pregunta o se actualiza en cada paso del reloj y probá de nuevo.";
+});
+
+// comprobante
+const btn = document.getElementById("descargar");
+const esc = s => (s || "").replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+btn.addEventListener("click", () => {
+  const ahora = new Date().toLocaleString("es-AR");
+  const filas = CASILLEROS.map(([k, t]) => `<tr><td>${t}</td><td>${esc(estado.txt[k]).replace(/\n/g, "<br>")}</td></tr>`).join("");
+  pintarSlots(estado.verificado);
+  const svg = document.getElementById("diagrama").outerHTML;
+  document.getElementById("comprobante").innerHTML =
+    `<section><h1>Guía 6 · Problema 1 · Diseño</h1><p>${esc(estado.nombre)} · Grupo ${esc(estado.legajo)} · ${ahora}</p>
+     <table class="c-tabla">${filas}</table></section>
+     <section>${svg}</section>`;
+  window.print();
+});
+
+pintarBanco(); pintarSlots(estado.verificado);
+</script>
+</body>
+</html>
