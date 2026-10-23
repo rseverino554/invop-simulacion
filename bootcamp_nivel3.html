@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code boot camp · Nivel 3</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.05rem;margin:0 0 8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.num{display:inline-grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.tema{color:var(--suave);font-weight:400;font-size:.9rem}
+.tipo{font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--acento);background:var(--acento-suave);border-radius:999px;padding:1px 9px}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:18px 20px;margin:0 0 16px}
+section.bien{border-color:var(--ok)}
+section.mal{border-color:#e3a09b}
+.frase{margin:0 0 10px}
+pre,.cod{margin:0;font:13.5px/1.45 ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;white-space:pre;overflow-x:auto}
+.ctx{background:var(--fondo);border:1px solid var(--linea);border-radius:6px;padding:8px 10px;margin:0 0 10px}
+.ctx-t{font-size:.8rem;color:var(--suave);margin:0 0 4px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;padding:10px;border:1px dashed var(--linea);border-radius:8px;margin:0 0 10px;min-height:48px}
+.banco.lineas{flex-direction:column;align-items:flex-start}
+button.ficha{font:13.5px ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;white-space:pre;padding:5px 10px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--tinta);border-radius:8px;cursor:pointer;text-align:left}
+button.ficha:hover{border-color:var(--tinta)}
+button.ficha.usada{opacity:.3;cursor:default}
+.armado{background:var(--fondo);border:1px solid var(--linea);border-radius:8px;padding:10px;min-height:52px;margin:0 0 8px}
+.armado .vacio{color:var(--suave);font-size:.88rem}
+.armado.bien{border-color:var(--ok);background:var(--ok-suave)}
+.armado.mal{border-color:#e3a09b;background:var(--mal-suave)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font:13.5px ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;white-space:pre;padding:3px 8px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--tinta);border-radius:6px;cursor:pointer}
+.chip.dist{border-color:#c9706b}
+.chip:hover{text-decoration:line-through}
+.renglon{display:flex;gap:6px;align-items:center;margin:2px 0}
+.renglon pre{flex:1;padding:3px 8px;border:1px solid var(--acento);background:var(--acento-suave);border-radius:6px}
+.renglon.dist pre{border-color:#c9706b}
+.renglon button{font:inherit;font-size:.8rem;border:1px solid var(--linea);background:transparent;color:var(--acento);border-radius:5px;padding:1px 7px;cursor:pointer}
+.vista{font-size:.82rem;color:var(--suave);margin:2px 0 6px}
+.vista pre{display:inline;color:var(--tinta)}
+.pista{margin:10px 0 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0;font-size:.92rem}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.mini{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:transparent;color:var(--acento);cursor:pointer}
+.msj{font-size:.95rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+
+/* TEMA marino UdeSA (#00529b, #003b6f, #122535, #7e9ebb) */
+:root{--fondo:#122535;--papel:#1a3349;--tinta:#e6edf3;--suave:#9fb4c7;--linea:#2a4a66;
+ --acento:#7e9ebb;--acento-suave:#1f3f5b;--ok:#8be0a1;--ok-suave:#173d2a;--mal:#f2a3a0;--mal-suave:#442125;
+ --sobre-acento:#122535;--amarillo:#3a3418;--borde-amarillo:#d9a400}
+body{background:var(--fondo);color:var(--tinta)}
+h1,h2{color:#fff}
+.num,button.accion,.ficha.elegida{color:var(--sobre-acento)}
+.bdt{fill:var(--sobre-acento)}
+input,textarea{background:#14283a;color:var(--tinta)}
+button.sec,button.ver{background:transparent;color:var(--acento)}
+svg .caja{fill:var(--papel);stroke:#9fb4c7}
+.txt{fill:var(--tinta)}
+.hueco{fill:#14283a}
+.hueco.lleno{fill:var(--acento-suave)}
+.hueco.bien{fill:var(--ok-suave)}
+.hueco.malo{stroke:#c9706b;fill:var(--mal-suave)}
+.hueco.sobre{fill:var(--amarillo)}
+.flecha{stroke:#9fb4c7}
+.pista{background:var(--amarillo);color:var(--tinta);border-left-color:var(--borde-amarillo)}
+a.caja:hover{background:#27506f}
+.ctx{background:#14283a}
+label.op{background:#14283a}
+@media print{
+ :root{--fondo:#f6f5f1;--papel:#fff;--tinta:#1f2328;--suave:#5b6370;--linea:#d5d2c8;--acento:#1d4e89;--acento-suave:#e3ecf7;--ok:#1f7a3a;--ok-suave:#e2f3e7;--mal:#b3261e;--mal-suave:#fbe5e3}
+ h1,h2{color:#1f2328} input,textarea{background:#fff;color:#1f2328}
+}
+</style>
+</head>
+<body>
+<main>
+  <a href="bootcamp.html" style="font-size:.9rem;color:#7e9ebb;text-decoration:none">← Code boot camp</a>
+  <h1>Code boot camp · Nivel 3</h1>
+  <p class="sub">Armá el código. Cada ejercicio trae un pedido y un banco de fichas; algunas sobran. En los primeros siete se arma una sola línea tocando las fichas en orden (las fichas se pegan tal cual, una a continuación de la otra). En los últimos tres se ordenan líneas completas, con su sangría. Tocá una ficha ya puesta para sacarla.</p>
+
+  <div id="ejercicios"></div>
+
+  <section>
+    <div class="fila">
+      <button class="accion" id="verificar">Verificar</button>
+      <button class="accion sec" id="reiniciar">Empezar de nuevo</button>
+      <span class="msj" id="msj"></span>
+    </div>
+  </section>
+  <p><a href="bootcamp.html" style="color:#7e9ebb;text-decoration:none">← Volver al Code boot camp</a></p>
+</main>
+
+<script>
+const ID = "bootcamp_n3";
+const EJ = [{"modo": "fichas", "tema": "El generador", "enunciado": "Crear el generador de números aleatorios con semilla 7 y guardarlo en rng.", "ctx": "", "fichas": [{"txt": " = ", "dist": false, "pista": ""}, {"txt": "rng", "dist": false, "pista": ""}, {"txt": "np.random", "dist": false, "pista": ""}, {"txt": ".random_rng", "dist": true, "pista": "Ese método no existe. El generador se crea con default_rng."}, {"txt": "(size=7)", "dist": true, "pista": "7 es la semilla y va sola entre paréntesis. size es la cantidad de sorteos, y se le pide después al generador."}, {"txt": "(7)", "dist": false, "pista": ""}, {"txt": ".default_rng", "dist": false, "pista": ""}], "correcta": "rng = np.random.default_rng(7)", "n_correctas": 5, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "Una variable discreta", "enunciado": "Sortear 1.000 demandas de la tabla (valores con sus probabilidades probas) y guardarlas en demanda.", "ctx": "rng = np.random.default_rng(7)\nvalores = np.array([0, 1000, 2000, 3000])\nprobas = np.array([0.1, 0.2, 0.3, 0.4])", "fichas": [{"txt": "(valores, ", "dist": false, "pista": ""}, {"txt": "probas, ", "dist": true, "pista": "Se sortea entre los valores, y las probabilidades van aparte, con p=, no como lo que se sortea."}, {"txt": ")", "dist": false, "pista": ""}, {"txt": "demanda", "dist": false, "pista": ""}, {"txt": " = ", "dist": false, "pista": ""}, {"txt": "size=1000, ", "dist": false, "pista": ""}, {"txt": "p=probas", "dist": false, "pista": ""}, {"txt": "rng.normal", "dist": true, "pista": "La normal es continua y recibe media y desvío. Para valores puntuales con probabilidades es choice."}, {"txt": "rng.choice", "dist": false, "pista": ""}], "correcta": "demanda = rng.choice(valores, size=1000, p=probas)", "n_correctas": 7, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "Una probabilidad", "enunciado": "Estimar la probabilidad de perder plata como la fracción de réplicas con ganancia negativa, y guardarla en prob.", "ctx": "ganancia = np.array([-200, 150, 300, -50, 400])", "fichas": [{"txt": "(ganancia < 0)", "dist": false, "pista": ""}, {"txt": "(ganancia) < 0", "dist": true, "pista": "Eso pregunta si el promedio de las ganancias es negativo, y da verdadero o falso. No es una fracción de réplicas."}, {"txt": "np.mean", "dist": false, "pista": ""}, {"txt": "np.sum", "dist": true, "pista": "np.sum cuenta cuántas réplicas pierden (2), no qué fracción son."}, {"txt": "prob", "dist": false, "pista": ""}, {"txt": " = ", "dist": false, "pista": ""}], "correcta": "prob = np.mean(ganancia < 0)", "n_correctas": 4, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "El eje", "enunciado": "Con una fila por réplica y una columna por mes, calcular el total del año de cada réplica y guardarlo en total.", "ctx": "rng = np.random.default_rng(7)\ningresos = rng.normal(100, 10, size=(4, 12))", "fichas": [{"txt": ".mean", "dist": true, "pista": "mean promedia los doce meses. El pedido es el total, que es sum."}, {"txt": "total", "dist": false, "pista": ""}, {"txt": "ingresos", "dist": false, "pista": ""}, {"txt": " = ", "dist": false, "pista": ""}, {"txt": "(axis=1)", "dist": false, "pista": ""}, {"txt": "(axis=0)", "dist": true, "pista": "El eje que se pasa es el que desaparece: con axis=0 desaparecen las filas y queda un total por mes, no por réplica."}, {"txt": ".sum", "dist": false, "pista": ""}], "correcta": "total = ingresos.sum(axis=1)", "n_correctas": 5, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "Un sorteo por réplica", "enunciado": "Sortear un ruido por réplica (media 0, desvío 0,05) que después va a escalar los 12 meses de esa réplica. N es la cantidad de réplicas.", "ctx": "rng = np.random.default_rng(7)\nN = 1000", "fichas": [{"txt": "(0, 0.05, ", "dist": false, "pista": ""}, {"txt": ")", "dist": false, "pista": ""}, {"txt": "rng.normal", "dist": false, "pista": ""}, {"txt": "size=(N, 1)", "dist": false, "pista": ""}, {"txt": "size=(1, N)", "dist": true, "pista": "Eso es una fila: una réplica con N columnas. Hace falta lo contrario, N filas y una sola columna."}, {"txt": "size=N", "dist": true, "pista": "Da un vector plano de N números. Para que se extienda a los meses de cada réplica hace falta una columna."}, {"txt": "ruido", "dist": false, "pista": ""}, {"txt": " = ", "dist": false, "pista": ""}], "correcta": "ruido = rng.normal(0, 0.05, size=(N, 1))", "n_correctas": 6, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "Cuánto dura cada estado", "enunciado": "El estado vale desde cada instante de t hasta el siguiente, y el último hasta T (el fin de la simulación). Calcular cuánto dura cada estado y guardarlo en duracion.", "ctx": "t = np.array([0.0, 0.5, 1.2, 1.4, 2.1])\nT = 3.0", "fichas": [{"txt": " = ", "dist": false, "pista": ""}, {"txt": "duracion", "dist": false, "pista": ""}, {"txt": "(t, T))", "dist": false, "pista": ""}, {"txt": "np.cumsum", "dist": true, "pista": "cumsum acumula. Para cuánto dura cada estado hace falta la diferencia entre instantes consecutivos, que es diff."}, {"txt": "np.diff", "dist": false, "pista": ""}, {"txt": "(np.append", "dist": false, "pista": ""}, {"txt": "(t))", "dist": true, "pista": "np.append necesita el valor a agregar: acá hay que agregar T, para que el último estado también tenga duración."}], "correcta": "duracion = np.diff(np.append(t, T))", "n_correctas": 5, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "fichas", "tema": "Graficar un estado", "enunciado": "Dibujar en el panel eje el estado n en cada instante t, sabiendo que cada valor se mantiene hasta el próximo evento.", "ctx": "t = np.array([0.0, 0.5, 1.2, 1.4, 2.1, 3.0])\nn = np.array([0, 1, 2, 1, 0, 1])", "fichas": [{"txt": ".plot", "dist": true, "pista": "plot une los puntos con rectas e inventa estados intermedios que nunca existieron."}, {"txt": "where=\"pre\"", "dist": true, "pista": "pre mantiene cada valor hacia atrás. El estado vale desde su instante hasta el siguiente: post."}, {"txt": "eje", "dist": false, "pista": ""}, {"txt": "where=\"post\"", "dist": false, "pista": ""}, {"txt": "(t, n, ", "dist": false, "pista": ""}, {"txt": ".step", "dist": false, "pista": ""}, {"txt": ")", "dist": false, "pista": ""}], "correcta": "eje.step(t, n, where=\"post\")", "n_correctas": 5, "pista_orden": "Todas las fichas son las que van, pero el orden no es el correcto: cada fragmento se pega a continuación del anterior y tiene que leerse como una línea de código."}, {"modo": "lineas", "tema": "Un barrido", "enunciado": "Para cada tope Q de la grilla, simular 1.000 demandas con los mismos sorteos y guardar la media de lo que se vende (el menor entre la demanda y Q). Ordená las líneas, con su sangría.", "ctx": "rng = np.random.default_rng(7)\nvalores = np.array([0, 1000, 2000, 3000])\nprobas = np.array([0.1, 0.2, 0.3, 0.4])\ngrilla = [1000, 2000, 3000]\nmedias = []", "fichas": [{"txt": "    rng = np.random.default_rng(7)", "dist": false, "pista": ""}, {"txt": "for Q in grilla:", "dist": false, "pista": ""}, {"txt": "    medias.append(ventas.mean())", "dist": false, "pista": ""}, {"txt": "rng = np.random.default_rng(7)", "dist": true, "pista": "Sin sangría, esa línea queda afuera del for: el for se queda sin cuerpo o el generador no se reinicia en cada Q, y cada tope vería sorteos distintos. Para comparar decisiones, el reinicio va adentro."}, {"txt": "    demanda = rng.choice(valores, size=1000, p=probas)", "dist": false, "pista": ""}, {"txt": "    ventas = np.maximum(demanda, Q)", "dist": true, "pista": "Lo que se vende es el menor entre la demanda y Q, no el mayor."}, {"txt": "    ventas = np.minimum(demanda, Q)", "dist": false, "pista": ""}], "correcta": "for Q in grilla:\n    rng = np.random.default_rng(7)\n    demanda = rng.choice(valores, size=1000, p=probas)\n    ventas = np.minimum(demanda, Q)\n    medias.append(ventas.mean())", "n_correctas": 5, "pista_orden": "Cada línea usa lo que calcula la anterior: primero el generador, después la demanda, después las ventas, y al final se guarda la media. Todo, adentro del for."}, {"modo": "lineas", "tema": "Atender a la primera", "enunciado": "Si hay alguien en la fila, atender al que más espera (FIFO) y guardar cuánto esperó, sabiendo que ahora es t y la fila guarda horas de llegada. Ordená las líneas, con su sangría.", "ctx": "fila = [0.5, 1.2, 1.4]\nt = 2.0\nesperas = []", "fichas": [{"txt": "    esperas.append(espera)", "dist": false, "pista": ""}, {"txt": "    primera = fila.pop(0)", "dist": false, "pista": ""}, {"txt": "if fila:", "dist": false, "pista": ""}, {"txt": "    primera = fila.pop()", "dist": true, "pista": "pop() sin argumento saca la última, la que acaba de llegar. La primera es pop(0)."}, {"txt": "    espera = t - primera", "dist": false, "pista": ""}, {"txt": "    espera = primera - t", "dist": true, "pista": "La espera es el instante actual menos la hora de llegada. Al revés da negativa."}], "correcta": "if fila:\n    primera = fila.pop(0)\n    espera = t - primera\n    esperas.append(espera)", "n_correctas": 4, "pista_orden": "Primero se pregunta si hay alguien, adentro se saca a la primera, después se calcula su espera y al final se guarda."}, {"modo": "lineas", "tema": "Un estado que se arrastra", "enunciado": "Armar la matriz de dotación: el estado inicial (63) en la primera columna de todas las réplicas, y cada columna siguiente sale de la anterior por la retención. Ordená las líneas, con su sangría.", "ctx": "rng = np.random.default_rng(7)\nN = 3\nretencion = rng.uniform(0.9, 1.0, size=(N, 4))", "fichas": [{"txt": "for i in range(1, 4):", "dist": false, "pista": ""}, {"txt": "    dotacion[:, i] = dotacion[:, i - 1] * retencion[:, i - 1]", "dist": false, "pista": ""}, {"txt": "dotacion[:, 0] = 63", "dist": false, "pista": ""}, {"txt": "dotacion[0, :] = 63", "dist": true, "pista": "Escribe 63 en todas las columnas de la primera réplica. El estado inicial va en todas las réplicas (las filas) de la columna 0: dotacion[:, 0]."}, {"txt": "    dotacion[:, i] = dotacion[:, i + 1] * retencion[:, i - 1]", "dist": true, "pista": "i + 1 es la columna siguiente, que todavía no se calculó: cada columna sale de la anterior, i - 1."}, {"txt": "dotacion = np.zeros((N, 4))", "dist": false, "pista": ""}], "correcta": "dotacion = np.zeros((N, 4))\ndotacion[:, 0] = 63\nfor i in range(1, 4):\n    dotacion[:, i] = dotacion[:, i - 1] * retencion[:, i - 1]", "n_correctas": 4, "pista_orden": "La matriz se crea primero, después se escribe el estado inicial, y recién entonces el for va calculando una columna por vuelta."}];
+
+// resp[i]: arreglo con los indices de las fichas puestas, en orden
+let estado = {resp: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g && g.resp) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const el = (tag, cls, txt) => { const x = document.createElement(tag); if (cls) x.className = cls; if (txt !== undefined) x.textContent = txt; return x; };
+const puestas = i => { if (!Array.isArray(estado.resp[i])) estado.resp[i] = []; estado.resp[i] = estado.resp[i].filter(k => k >= 0 && k < EJ[i].fichas.length); return estado.resp[i]; };
+const armado = i => puestas(i).map(k => EJ[i].fichas[k].txt).join(EJ[i].modo === "fichas" ? "" : "\n");
+
+const cont = document.getElementById("ejercicios");
+const tarj = [];
+EJ.forEach((e, i) => {
+  const s = el("section");
+  const h = el("h2");
+  h.appendChild(el("span", "num", i + 1));
+  h.appendChild(el("span", "", "Ejercicio " + (i + 1)));
+  h.appendChild(el("span", "tema", "· " + e.tema));
+  h.appendChild(el("span", "tipo", e.modo === "fichas" ? "Una línea" : "Un bloque"));
+  s.appendChild(h);
+  s.appendChild(el("p", "frase", e.enunciado));
+  if (e.ctx) {
+    const c = el("div", "ctx");
+    c.appendChild(el("p", "ctx-t", "Ya está definido:"));
+    c.appendChild(el("pre", "", e.ctx));
+    s.appendChild(c);
+  }
+  s.appendChild(el("p", "ctx-t", "Fichas:"));
+  const banco = el("div", "banco" + (e.modo === "lineas" ? " lineas" : ""));
+  s.appendChild(banco);
+  s.appendChild(el("p", "ctx-t", "Tu código:"));
+  const arm = el("div", "armado");
+  s.appendChild(arm);
+  const vista = el("div", "vista"); vista.hidden = e.modo !== "fichas";
+  s.appendChild(vista);
+  const pistas = el("div");
+  s.appendChild(pistas);
+  const fila = el("div", "fila");
+  const bd = el("button", "mini", "Deshacer"); bd.type = "button";
+  const bt = el("button", "mini", "Borrar todo"); bt.type = "button";
+  fila.appendChild(bd); fila.appendChild(bt);
+  s.appendChild(fila);
+  bd.addEventListener("click", () => { puestas(i).pop(); cambio(i); });
+  bt.addEventListener("click", () => { estado.resp[i] = []; cambio(i); });
+  cont.appendChild(s);
+  tarj.push({s, banco, arm, vista, pistas});
+});
+
+function cambio(i) { estado.verificado = false; guardar(); pintar(i); document.getElementById("msj").textContent = ""; }
+
+function pintar(i) {
+  const e = EJ[i], t = tarj[i], p = puestas(i);
+  t.s.classList.remove("bien", "mal"); t.arm.classList.remove("bien", "mal"); t.pistas.textContent = "";
+  // banco
+  t.banco.textContent = "";
+  e.fichas.forEach((f, k) => {
+    const b = el("button", "ficha" + (p.includes(k) ? " usada" : ""), f.txt); b.type = "button";
+    b.addEventListener("click", () => { if (!p.includes(k)) { p.push(k); cambio(i); } });
+    t.banco.appendChild(b);
+  });
+  // armado
+  t.arm.textContent = "";
+  if (!p.length) t.arm.appendChild(el("span", "vacio", "Tocá las fichas en el orden en que van."));
+  if (e.modo === "fichas") {
+    const ch = el("div", "chips");
+    p.forEach((k, pos) => {
+      const c = el("span", "chip", e.fichas[k].txt);
+      c.addEventListener("click", () => { p.splice(pos, 1); cambio(i); });
+      ch.appendChild(c);
+    });
+    t.arm.appendChild(ch);
+    t.vista.textContent = "";
+    if (p.length) { t.vista.appendChild(document.createTextNode("Queda: ")); t.vista.appendChild(el("pre", "", armado(i))); }
+  } else {
+    p.forEach((k, pos) => {
+      const r = el("div", "renglon");
+      r.appendChild(el("pre", "", e.fichas[k].txt));
+      const up = el("button", "", "▲"), dn = el("button", "", "▼"), x = el("button", "", "✕");
+      [up, dn, x].forEach(b => b.type = "button");
+      up.addEventListener("click", () => { if (pos > 0) { [p[pos - 1], p[pos]] = [p[pos], p[pos - 1]]; cambio(i); } });
+      dn.addEventListener("click", () => { if (pos < p.length - 1) { [p[pos + 1], p[pos]] = [p[pos], p[pos + 1]]; cambio(i); } });
+      x.addEventListener("click", () => { p.splice(pos, 1); cambio(i); });
+      r.appendChild(up); r.appendChild(dn); r.appendChild(x);
+      t.arm.appendChild(r);
+    });
+  }
+}
+
+const pista = (i, txt) => { const d = el("div", "pista", "Pista: " + txt); tarj[i].pistas.appendChild(d); };
+
+function evaluar(i) {
+  const e = EJ[i], t = tarj[i], p = puestas(i);
+  pintar(i);
+  if (!p.length) return "falta";
+  if (armado(i) === e.correcta) { t.s.classList.add("bien"); t.arm.classList.add("bien"); return "ok"; }
+  t.s.classList.add("mal"); t.arm.classList.add("mal");
+  const dist = p.filter(k => e.fichas[k].dist);
+  dist.forEach(k => pista(i, "«" + e.fichas[k].txt.trim() + "»: " + e.fichas[k].pista));
+  if (!dist.length) {
+    if (p.length < e.n_correctas) pista(i, "Todavía faltan fichas: la respuesta usa " + e.n_correctas + " y pusiste " + p.length + ".");
+    else pista(i, e.pista_orden);
+  }
+  return "mal";
+}
+function verificar() {
+  const res = EJ.map((e, i) => evaluar(i));
+  const bien = res.filter(x => x === "ok").length, mal = res.filter(x => x === "mal").length, falta = res.filter(x => x === "falta").length;
+  estado.verificado = true; guardar();
+  const m = document.getElementById("msj");
+  m.className = "msj " + (bien === EJ.length ? "ok" : "mal");
+  m.textContent = bien === EJ.length ? "Los " + EJ.length + " ejercicios están bien." :
+    bien + " bien, " + mal + " en rojo" + (falta ? ", " + falta + " sin empezar" : "") + ". Leé las pistas, corregí y volvé a verificar.";
+}
+document.getElementById("verificar").addEventListener("click", verificar);
+document.getElementById("reiniciar").addEventListener("click", () => { estado = {resp: {}, verificado: false}; guardar(); location.reload(); });
+EJ.forEach((e, i) => pintar(i));
+if (estado.verificado) verificar();
+</script>
+</body>
+</html>
