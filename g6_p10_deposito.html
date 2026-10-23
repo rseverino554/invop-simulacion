@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 6 · Problema 10 · El depósito con dársena</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
+.enun{font-size:.95rem}
+.ident{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-weight:600;font-size:.92rem;display:block;margin-bottom:4px}
+.ayuda{font-weight:400;color:var(--suave);font-size:.85rem;display:block}
+input,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.casillero{margin-bottom:14px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:10px;border:1px dashed var(--linea);border-radius:8px;min-height:52px}
+.ficha{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--acento);border-radius:999px;cursor:grab}
+.ficha.elegida{background:var(--acento);color:#fff}
+.ficha.usada{opacity:.35}
+svg{width:100%;height:auto;display:block}
+.caja{fill:#fff;stroke:#444;stroke-width:1.5}
+.hueco{fill:#fafafa;stroke:var(--acento);stroke-width:2;stroke-dasharray:6 4;cursor:pointer}
+.hueco.lleno{stroke-dasharray:none;fill:var(--acento-suave)}
+.hueco.bien{stroke:var(--ok);fill:var(--ok-suave)}
+.hueco.malo{stroke:#e3a09b;fill:var(--mal-suave)}
+.hueco.sobre{fill:#fff6d6}
+.txt{font:15px system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.etq{font:12px system-ui,sans-serif;fill:var(--suave)}
+.flecha{stroke:#444;stroke-width:1.5;fill:none;marker-end:url(#punta)}
+.pistas{margin-top:10px;font-size:.92rem}
+.pista{margin:6px 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0}
+.bd{fill:var(--acento)}
+.bdt{font:700 12px system-ui,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.ver{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:#fff;color:var(--acento);cursor:pointer;margin-top:6px}
+.solucion{margin-top:8px;padding:10px 12px;background:var(--acento-suave);border-left:4px solid var(--acento);border-radius:0 6px 6px 0;font-size:.93rem}
+.solucion[hidden]{display:none}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msj{margin-top:10px;font-size:.92rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+table.dem{border-collapse:collapse;margin:8px 0;font-size:.9rem}
+table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-align:center}
+#comprobante{display:none}
+@media (max-width:600px){.ident{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main>*:not(#comprobante){display:none!important}
+  #comprobante{display:block!important}
+  #comprobante section{border:0;padding:0;margin:0 0 12px}
+  .c-tabla{width:100%;border-collapse:collapse}
+  .c-tabla td{border:1px solid #999;padding:5px 7px;vertical-align:top;font-size:10pt}
+  .c-tabla td:first-child{width:30%;font-weight:600}
+  svg{max-height:15cm}
+}
+.caja.gris{fill:#ecebe4}
+.linea{stroke:#444;stroke-width:1.5;fill:none}
+section ol{margin:6px 0 0;padding-left:1.4em}
+section ol li{margin:2px 0}
+@media (max-width:600px){svg{min-width:0}}
+</style>
+</head>
+<body>
+<main>
+  <a href="guia6.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Guía 6</a>
+  <h1>Guía 6 · Problema 10 · El depósito con dársena</h1>
+  <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
+
+  <section>
+    <h2><span class="num">0</span>Para el encabezado del PDF</h2>
+    <div class="ident">
+      <div><label for="nombre">Nombre y apellido</label><input id="nombre" autocomplete="name"></div>
+      <div><label for="legajo">Grupo</label><input id="legajo"></div>
+    </div>
+  </section>
+
+  <section class="enun">
+    <h2>El problema</h2>
+    <p>Un centro de distribución vende pallets de agua mineral a los comercios de su zona desde un depósito propio, las 24 horas, todos los días. Los pedidos de los comercios llegan con <b>tiempo entre llegadas</b> exponencial de media una hora, y cada uno pide la cantidad de pallets de la primera tabla; si el depósito tiene menos de lo que pide, se le vende lo que hay y el resto es <b>venta perdida</b>, como en la ferretería del problema 7. La reposición sigue la misma <b>política (s, Q)</b>: cuando una venta deja el stock en s pallets o menos y no hay un pedido pendiente, se pide a la embotelladora un lote de Q pallets, que es la carga de un camión completo.</p>
+    <p>La diferencia con la ferretería está en cómo entra el lote. El camión viaja L horas hasta el predio y ahí tiene que <b>descargar en la dársena</b> del centro, que funciona como la del problema 2: una sola boca, que atiende por orden de llegada, con una descarga de duración exponencial. Por esa misma dársena pasan los camiones de los otros proveedores del centro, que llegan con tiempo entre llegadas exponencial y hacen la misma fila. El lote entra al stock recién cuando su descarga termina, así que la demora efectiva de un pedido es L más lo que el camión espera en la fila más lo que dura su descarga. Los parámetros y los costos están en la segunda tabla; el centro evalúa habilitar una segunda dársena idéntica, que cuesta lo mismo por día que la primera.</p>
+    <table class="dem"><tr><th>Pallets que pide un comercio</th><th>1</th><th>2</th><th>4</th><th>8</th></tr><tr><td>Probabilidad</td><td>0,4</td><td>0,3</td><td>0,2</td><td>0,1</td></tr></table><table class="dem"><tr><th>Parámetro</th><th>Valor</th></tr><tr><td>Tiempo medio entre pedidos de comercios (horas)</td><td>1</td></tr><tr><td>Punto de pedido s (pallets)</td><td>20</td></tr><tr><td>Lote Q, la carga de un camión (pallets)</td><td>150</td></tr><tr><td>Viaje del lote hasta el predio, L (horas)</td><td>10</td></tr><tr><td>Camiones de otros proveedores (por hora)</td><td>0,5</td></tr><tr><td>Duración media de una descarga (horas)</td><td>1,5</td></tr><tr><td>Dársenas habilitadas hoy</td><td>1</td></tr><tr><td>Tenencia (pesos por pallet y por día)</td><td>200</td></tr><tr><td>Venta perdida (pesos por pallet)</td><td>8.000</td></tr><tr><td>Costo fijo por pedido (pesos)</td><td>20.000</td></tr><tr><td>Costo de una dársena habilitada (pesos por día)</td><td>3.000</td></tr></table><p style="margin-bottom:2px"><b>Ítems del problema:</b></p><ol type="a"><li>Simular 100 días por próximo evento con una dársena y la política actual, arrancando con s + Q = 170 pallets, y calcular el stock medio, la fracción del tiempo sin stock, los pallets perdidos por día y la espera media del camión del lote en la dársena. Validar con el caso extremo sin camiones ajenos y con descarga casi instantánea, que tiene que dar lo mismo que la ferretería del problema 7 con demora L, y verificar que la demora efectiva media de un pedido es L más la espera media más la descarga media.</li><li>Habilitar la segunda dársena y calcular cuánto bajan la fracción del tiempo sin stock, los pallets perdidos por día y la espera del camión del lote, con 20 réplicas y el error estándar de cada baja.</li><li>Hacer un barrido conjunto del punto de pedido s, de 0 a 120 pallets de a 20, y de la cantidad de dársenas (una y dos), con las mismas semillas, y hallar la combinación de menor costo diario total (tenencia, ventas perdidas, pedidos y dársenas). Comparar el s óptimo con una y con dos dársenas.</li></ol>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>La plantilla de diseño</h2>
+    <p class="sub" style="margin-bottom:12px">Escribí con tus palabras, una o dos oraciones por casillero. Cuando termines un casillero, podés ver la solución y compararla con lo tuyo.</p>
+    <div id="plantilla"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>El diagrama de flujo</h2>
+    <p class="sub" style="margin-bottom:6px">El diagrama está entero vacío: son 22 cajas, las numeradas, sin ninguna con texto. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <div class="banco" id="banco"></div>
+    <svg id="diagrama" viewBox="0 0 1000 950" role="img" aria-label="Diagrama de flujo del depósito con dársena">
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <g class="slot" data-slot="ini"><rect class="hueco" x="200" y="8" width="600" height="52" rx="26"/><text class="txt" x="500" y="34"></text></g>
+      <g class="slot" data-slot="d0"><polygon class="hueco" points="500,88 670,120 500,152 330,120"/><text class="txt" x="500" y="120"></text></g>
+      <g class="slot" data-slot="res"><rect class="hueco" x="715" y="94" width="250" height="52"/><text class="txt" x="840" y="120"></text></g>
+      <g class="slot" data-slot="av"><rect class="hueco" x="240" y="180" width="520" height="52"/><text class="txt" x="500" y="206"></text></g>
+      <g class="slot" data-slot="d1"><polygon class="hueco" points="500,262 620,290 500,318 380,290"/><text class="txt" x="500" y="290"></text></g>
+      <g class="slot" data-slot="l1a"><rect class="hueco" x="20" y="343" width="300" height="44"/><text class="txt" x="170" y="365"></text></g>
+      <g class="slot" data-slot="l1b"><rect class="hueco" x="20" y="403" width="300" height="44"/><text class="txt" x="170" y="425"></text></g>
+      <g class="slot" data-slot="ld"><polygon class="hueco" points="170,473 315,505 170,537 25,505"/><text class="txt" x="170" y="505"></text></g>
+      <g class="slot" data-slot="la"><rect class="hueco" x="20" y="566" width="300" height="48"/><text class="txt" x="170" y="590"></text></g>
+      <g class="slot" data-slot="lp"><rect class="hueco" x="30" y="643" width="280" height="44"/><text class="txt" x="170" y="665"></text></g>
+      <g class="slot" data-slot="c1"><rect class="hueco" x="350" y="343" width="300" height="44"/><text class="txt" x="500" y="365"></text></g>
+      <g class="slot" data-slot="c1b"><rect class="hueco" x="350" y="403" width="300" height="44"/><text class="txt" x="500" y="425"></text></g>
+      <g class="slot" data-slot="cd"><polygon class="hueco" points="500,477 610,505 500,533 390,505"/><text class="txt" x="500" y="505"></text></g>
+      <g class="slot" data-slot="ca"><rect class="hueco" x="338" y="566" width="156" height="48"/><text class="txt" x="416" y="590"></text></g>
+      <g class="slot" data-slot="cb"><rect class="hueco" x="506" y="566" width="156" height="48"/><text class="txt" x="584" y="590"></text></g>
+      <g class="slot" data-slot="f1"><rect class="hueco" x="680" y="343" width="300" height="44"/><text class="txt" x="830" y="365"></text></g>
+      <g class="slot" data-slot="f1b"><rect class="hueco" x="680" y="403" width="300" height="44"/><text class="txt" x="830" y="425"></text></g>
+      <g class="slot" data-slot="fd"><polygon class="hueco" points="830,477 940,505 830,533 720,505"/><text class="txt" x="830" y="505"></text></g>
+      <g class="slot" data-slot="fa"><rect class="hueco" x="668" y="566" width="156" height="48"/><text class="txt" x="746" y="590"></text></g>
+      <g class="slot" data-slot="fb"><rect class="hueco" x="836" y="566" width="156" height="48"/><text class="txt" x="914" y="590"></text></g>
+      <g class="slot" data-slot="de"><polygon class="hueco" points="500,747 640,775 500,803 360,775"/><text class="txt" x="500" y="775"></text></g>
+      <g class="slot" data-slot="du"><rect class="hueco" x="220" y="829" width="560" height="52"/><text class="txt" x="500" y="855"></text></g>
+      <path class="flecha" d="M500 60 L500 88"/>
+      <path class="flecha" d="M500 152 L500 180"/>
+      <path class="flecha" d="M670 120 L715 120"/>
+      <path class="flecha" d="M500 232 L500 262"/>
+      <path class="flecha" d="M380 290 L170 290 L170 343"/>
+      <path class="flecha" d="M500 318 L500 343"/>
+      <path class="flecha" d="M620 290 L830 290 L830 343"/>
+      <path class="flecha" d="M170 387 L170 403"/>
+      <path class="flecha" d="M170 447 L170 473"/>
+      <path class="flecha" d="M170 537 L170 566"/>
+      <path class="flecha" d="M170 614 L170 643"/>
+      <path class="flecha" d="M315 505 L326 505 L326 665 L310 665"/>
+      <path class="flecha" d="M500 387 L500 403"/>
+      <path class="flecha" d="M500 447 L500 477"/>
+      <path class="flecha" d="M390 505 L390 545 L416 545 L416 566"/>
+      <path class="flecha" d="M610 505 L610 545 L584 545 L584 566"/>
+      <path class="flecha" d="M830 387 L830 403"/>
+      <path class="flecha" d="M830 447 L830 477"/>
+      <path class="flecha" d="M720 505 L720 545 L746 545 L746 566"/>
+      <path class="flecha" d="M940 505 L940 545 L914 545 L914 566"/>
+      <path class="linea" d="M170 687 L170 730"/>
+      <path class="linea" d="M416 614 L416 730"/>
+      <path class="linea" d="M584 614 L584 730"/>
+      <path class="linea" d="M746 614 L746 730"/>
+      <path class="linea" d="M914 614 L914 730"/>
+      <path class="linea" d="M914 730 L170 730"/>
+      <path class="flecha" d="M500 730 L500 747"/>
+      <path class="flecha" d="M500 803 L500 829"/>
+      <path class="linea" d="M360 775 L8 775"/>
+      <path class="linea" d="M500 881 L500 915 L8 915"/>
+      <path class="flecha" d="M8 915 L8 120 L330 120"/>
+      <text class="etq" x="508" y="168">sí</text>
+      <text class="etq" x="676" y="112">no</text>
+      <text class="etq" x="255" y="282">comercio</text>
+      <text class="etq" x="508" y="336">camión</text>
+      <text class="etq" x="650" y="282">fin de descarga</text>
+      <text class="etq" x="178" y="556">sí</text>
+      <text class="etq" x="318" y="497">no</text>
+      <text class="etq" x="362" y="523">sí</text>
+      <text class="etq" x="616" y="523">no</text>
+      <text class="etq" x="692" y="523">sí</text>
+      <text class="etq" x="946" y="523">no</text>
+      <text class="etq" x="508" y="817">sí</text>
+      <text class="etq" x="350" y="767">no</text>
+      </svg>
+    <div class="fila" style="margin-top:12px">
+      <button class="accion sec" id="verificar">Verificar el diagrama</button>
+      <span class="msj" id="msjDiag"></span>
+    </div>
+    <div class="pistas" id="pistas"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Guardar</h2>
+    <p class="sub" style="margin-bottom:10px">En la ventana de impresión elegí <b>Guardar como PDF</b>. Lo que escribiste también queda guardado en este navegador.</p>
+    <div class="fila"><button class="accion" id="descargar">Descargar en PDF</button></div>
+  </section>
+
+  <div id="comprobante"></div>
+  <p class="volver-pie"><a href="guia6.html" style="color:#1d4e89;text-decoration:none">← Volver a la Guía 6</a></p>
+</main>
+
+<script>
+const ID = "g6p10";
+const TITULO = "Guía 6 · Problema 10 · El depósito con dársena";
+const SLOTS = ["ini", "d0", "res", "av", "d1", "l1a", "c1", "f1", "l1b", "c1b", "f1b", "ld", "cd", "fd", "la", "ca", "cb", "fa", "fb", "lp", "de", "du"];
+const PISTAS = {"ini": "Hay que dejar listo el stock inicial y todo lo que se sortea antes del primer evento.", "d0": "Es el corte de todos los bucles de eventos.", "res": "Cuando se corta, falta sumar el tramo hasta T y armar las medidas.", "av": "Entre dos eventos nada cambia: se suman las cuatro áreas del tramo antes de mover el reloj.", "d1": "En este depósito hay tres tipos de evento.", "l1a": "La cantidad sale de una tabla de probabilidades.", "l1b": "Se vende hasta donde alcanza el stock.", "ld": "La política mira el stock y mira también si ya hay un pedido que todavía no entró al stock.", "la": "El camión sale ahora y llega al predio después del viaje: ese es el evento que se programa.", "lp": "Cada comercio deja programado al siguiente, se pida o no un lote.", "c1": "Llega un camión al predio, sea ajeno o del lote.", "c1b": "El camión del lote no programa a otro camión: eso lo hace una venta.", "cd": "El camión descarga ya o espera, según lo que encuentre.", "ca": "Si hay dársena libre, no hace fila.", "cb": "Si están todas ocupadas, ¿dónde queda?", "f1": "Termina una descarga: el camión sale del predio.", "f1b": "Este evento toca los dos estados: ¿qué pasa con el stock si el camión traía el lote?", "fd": "Terminó una descarga: ¿alguien espera la dársena?", "fa": "Si hay fila, ¿quién pasa a la dársena?", "fb": "Si no espera nadie, la dársena queda sin camión.", "de": "Llegan acá los que encontraron dársena libre y los que entran desde la fila, pero también los que no empiezan nada.", "du": "Acá se registra cuánto esperó el camión, se sortea su descarga con el generador de la dársena y se programa el fin."};
+const CASILLEROS = [
+  ["unidad", "Unidad de flujo", "quién recorre el sistema", "Dos: el pedido de un comercio, que mueve el stock, y el camión (ajeno o del lote), que hace fila en la dársena."],
+  ["estado", "Estado", "las variables que describen el sistema en cada instante, con su unidad", "El stock, en pallets, y si hay un pedido pendiente; N(t), camiones en el predio, en camiones; el vector fines de las dársenas y cuál descarga el lote; la fila de camiones, con su hora de llegada y su tipo."],
+  ["eventos", "Eventos: qué cambia", "cada evento y cómo modifica el estado", "Llega un comercio: el stock baja en lo vendido. Llega un camión, ajeno o del lote: N sube en 1. Termina una descarga: N baja en 1 y, si era el lote, el stock sube en Q."],
+  ["programa", "Qué programa y qué cancela", "qué eventos futuros dispara cada evento, y cuáles deja sin sentido", "El comercio programa al siguiente y, si deja el stock en s o menos sin pedido pendiente, la llegada del camión del lote L horas después. El camión ajeno programa al siguiente ajeno. La llegada del lote borra prox_pedido. El fin programa la descarga del primero de la fila o libera la dársena."],
+  ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Tiempo entre comercios: exponencial de media 1 hora. Pallets por comercio: la tabla de 1, 2, 4 y 8. Tiempo entre camiones ajenos: exponencial de media 2 horas. Descarga: exponencial de media 1,5 horas. Dos generadores, rng para los comercios y rng_dar para la dársena, para que la validación con la ferretería coincida."],
+  ["medidas", "Medidas", "qué se acumula durante la corrida y en qué medida se convierte al final", "Las áreas del stock, de las horas sin stock, de N(t) y de las dársenas ocupadas, más el último tramo; los pallets perdidos y los pedidos; la espera y la descarga de cada camión del lote, y la demora de cada pedido. Al final, el costo por día en cuatro términos: tenencia, ventas perdidas, pedidos y dársenas."],
+  ["horizonte", "Horizonte y parada", "cuánto se simula y cuál es la condición para parar", "100 días de 24 horas: T = 2.400 horas. Se para cuando el próximo evento cae después de T."],
+  ["validacion", "Validación", "con qué se cruza el resultado", "Sin camiones ajenos y con descarga casi instantánea tiene que dar lo mismo que la ferretería del problema 7 con demora L; la demora media de un pedido tiene que ser L más la espera media más la descarga media; y la dársena contra la fila M/M/1 con la tasa total de camiones."],
+  ["experimento", "Experimento", "qué se repite por fuera del diagrama: réplicas, barridos, escenarios", "Una y dos dársenas con 20 réplicas y las mismas semillas; y el barrido conjunto de s, de 0 a 120 de a 20, con 1 y 2 dársenas. Las réplicas y el barrido son bucles por fuera del diagrama."]
+];
+const FICHAS = [
+  ["ini", "Inicializar: t = 0, stock = s + Q, sin pedido pendiente"],
+  ["d0", "¿próximo evento antes de T?"],
+  ["res", "Último tramo, resumen y costo"],
+  ["av", "Sumar stock, vacío, N y dársenas; avanzar"],
+  ["d1", "¿qué evento es?"],
+  ["l1a", "Comercio: sortear cuánto pide"],
+  ["l1b", "vende lo que hay; el resto se pierde"],
+  ["ld", "¿stock ≤ s y sin pendiente?"],
+  ["la", "programar el camión del lote en t + L"],
+  ["lp", "programar el próximo comercio"],
+  ["c1", "Camión: N ← N + 1"],
+  ["c1b", "ajeno: programar el próximo ajeno"],
+  ["cd", "¿dársena libre?"],
+  ["ca", "descarga ya"],
+  ["cb", "a la fila"],
+  ["f1", "Fin en quien: N ← N − 1"],
+  ["f1b", "era el lote: stock += Q y demora"],
+  ["fd", "¿hay fila?"],
+  ["fa", "entra el primero"],
+  ["fb", "liberar la dársena"],
+  ["de", "¿empieza una descarga?"],
+  ["du", "Anotar espera; descarga con rng_dar; fines[quien] = t + dur"],
+  ["x1", "Inicializar: t = 0, stock = s, sin pedido pendiente"],
+  ["x2", "¿stock ≤ s?"],
+  ["x3", "vende lo que pide; nunca se pierde"],
+  ["x4", "programar el camión del lote en t"],
+  ["x5", "¿hay un camión del lote?"],
+  ["x6", "ajeno: programar el próximo lote"],
+  ["x7", "era el lote: stock += s y demora"],
+  ["x8", "Sumar stock y N; avanzar"]
+];
+const ORDEN = ["res", "cb", "x7", "de", "fd", "ca", "cd", "d0", "fa", "av", "ld", "lp", "x5", "x4", "l1a", "f1b", "c1", "fb", "f1", "d1", "l1b", "la", "x3", "c1b", "x6", "ini", "x1", "x2", "x8", "du"];
+
+let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const texto = k => FICHAS.find(f => f[0] === k)[1];
+
+// identificación
+for (const k of ["nombre", "legajo"]) {
+  const el = document.getElementById(k);
+  el.value = estado[k];
+  el.addEventListener("input", () => { estado[k] = el.value; guardar(); });
+}
+
+// plantilla
+const cont = document.getElementById("plantilla");
+for (const [k, tit, ay, sol] of CASILLEROS) {
+  const d = document.createElement("div");
+  d.className = "casillero";
+  d.innerHTML = `<label for="c_${k}">${tit}<span class="ayuda">${ay}</span></label><textarea id="c_${k}"></textarea>
+    <button type="button" class="ver" aria-expanded="false">Ver solución</button>
+    <div class="solucion" hidden></div>`;
+  cont.appendChild(d);
+  const ta = d.querySelector("textarea");
+  ta.value = estado.txt[k] || "";
+  ta.addEventListener("input", () => { estado.txt[k] = ta.value; guardar(); });
+  const bv = d.querySelector(".ver"), cs = d.querySelector(".solucion");
+  cs.textContent = sol;
+  bv.addEventListener("click", () => {
+    cs.hidden = !cs.hidden;
+    bv.textContent = cs.hidden ? "Ver solución" : "Ocultar solución";
+    bv.setAttribute("aria-expanded", String(!cs.hidden));
+  });
+}
+
+// diagrama
+const banco = document.getElementById("banco");
+let elegida = null;
+function pintarBanco() {
+  banco.innerHTML = "";
+  const usadas = Object.values(estado.slots);
+  for (const k of ORDEN) {
+    const b = document.createElement("button");
+    b.className = "ficha" + (usadas.includes(k) ? " usada" : "") + (elegida === k ? " elegida" : "");
+    b.textContent = texto(k);
+    b.draggable = true;
+    b.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", k));
+    b.addEventListener("click", () => { elegida = elegida === k ? null : k; pintarBanco(); });
+    banco.appendChild(b);
+  }
+}
+function poner(slot, k) {
+  for (const s in estado.slots) if (estado.slots[s] === k) delete estado.slots[s];
+  if (k) estado.slots[slot] = k; else delete estado.slots[slot];
+  estado.verificado = false;
+  elegida = null;
+  guardar(); pintarSlots(); pintarBanco();
+  document.getElementById("msjDiag").textContent = "";
+  document.getElementById("pistas").innerHTML = "";
+}
+function pintarSlots(marcar) {
+  document.querySelectorAll(".slot").forEach(g => {
+    const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
+    const k = estado.slots[s];
+    t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
+    h.classList.toggle("lleno", !!k);
+    h.classList.toggle("bien", !!marcar && k === s);
+    h.classList.toggle("malo", !!marcar && !!k && k !== s);
+  });
+}
+document.querySelectorAll(".slot").forEach(g => {
+  const s = g.dataset.slot, h = g.querySelector(".hueco");
+  g.addEventListener("click", () => { if (elegida) poner(s, elegida); else if (estado.slots[s]) poner(s, null); });
+  g.addEventListener("dragover", e => { e.preventDefault(); h.classList.add("sobre"); });
+  g.addEventListener("dragleave", () => h.classList.remove("sobre"));
+  g.addEventListener("drop", e => { e.preventDefault(); h.classList.remove("sobre"); poner(s, e.dataTransfer.getData("text/plain")); });
+});
+document.getElementById("verificar").addEventListener("click", () => {
+  const m = document.getElementById("msjDiag");
+  const llenos = SLOTS.filter(s => estado.slots[s]).length;
+  if (llenos === 0) { m.className = "msj mal"; m.textContent = "Todavía no pusiste ninguna ficha."; pintarSlots(); return; }
+  const buenos = SLOTS.filter(s => estado.slots[s] === s).length;
+  const malos = llenos - buenos, vacios = SLOTS.length - llenos;
+  pintarSlots(true);
+  mostrarPistas();
+  estado.verificado = buenos === SLOTS.length;
+  guardar();
+  m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
+  m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué hace cada tipo de evento sobre el stock y sobre la dársena, qué se programa y qué se pregunta, y probá de nuevo.";
+});
+
+// pistas: una por hueco equivocado, con el número del hueco
+function mostrarPistas() {
+  const c = document.getElementById("pistas");
+  c.innerHTML = "";
+  SLOTS.forEach((s, i) => {
+    if (estado.slots[s] && estado.slots[s] !== s) {
+      const d = document.createElement("div");
+      d.className = "pista";
+      d.textContent = `Pista para el hueco ${i + 1}: ${PISTAS[s]}`;
+      c.appendChild(d);
+    }
+  });
+}
+// números sobre los huecos, en el orden de SLOTS
+SLOTS.forEach((s, i) => {
+  const g = document.querySelector(`.slot[data-slot="${s}"]`), bb = g.querySelector(".hueco").getBBox();
+  const NS = "http://www.w3.org/2000/svg";
+  const c = document.createElementNS(NS, "circle"), t = document.createElementNS(NS, "text");
+  c.setAttribute("class", "bd"); c.setAttribute("cx", bb.x); c.setAttribute("cy", bb.y); c.setAttribute("r", 10);
+  t.setAttribute("class", "bdt"); t.setAttribute("x", bb.x); t.setAttribute("y", bb.y); t.textContent = i + 1;
+  g.appendChild(c); g.appendChild(t);
+});
+
+// comprobante
+const btn = document.getElementById("descargar");
+const esc = s => (s || "").replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+btn.addEventListener("click", () => {
+  const ahora = new Date().toLocaleString("es-AR");
+  const filas = CASILLEROS.map(([k, t]) => `<tr><td>${t}</td><td>${esc(estado.txt[k]).replace(/\n/g, "<br>")}</td></tr>`).join("");
+  pintarSlots(estado.verificado);
+  const svg = document.getElementById("diagrama").outerHTML;
+  document.getElementById("comprobante").innerHTML =
+    `<section><h1>${TITULO}</h1><p>${esc(estado.nombre)} · Grupo ${esc(estado.legajo)} · ${ahora}</p>
+     <table class="c-tabla">${filas}</table></section>
+     <section>${svg}</section>`;
+  window.print();
+});
+
+pintarBanco(); pintarSlots(estado.verificado);
+</script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 6 · Problema 6 · Las máquinas y el técnico</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
+.enun{font-size:.95rem}
+.ident{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-weight:600;font-size:.92rem;display:block;margin-bottom:4px}
+.ayuda{font-weight:400;color:var(--suave);font-size:.85rem;display:block}
+input,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.casillero{margin-bottom:14px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:10px;border:1px dashed var(--linea);border-radius:8px;min-height:52px}
+.ficha{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--acento);border-radius:999px;cursor:grab}
+.ficha.elegida{background:var(--acento);color:#fff}
+.ficha.usada{opacity:.35}
+svg{width:100%;height:auto;display:block}
+.caja{fill:#fff;stroke:#444;stroke-width:1.5}
+.hueco{fill:#fafafa;stroke:var(--acento);stroke-width:2;stroke-dasharray:6 4;cursor:pointer}
+.hueco.lleno{stroke-dasharray:none;fill:var(--acento-suave)}
+.hueco.bien{stroke:var(--ok);fill:var(--ok-suave)}
+.hueco.malo{stroke:#e3a09b;fill:var(--mal-suave)}
+.hueco.sobre{fill:#fff6d6}
+.txt{font:15px system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.etq{font:12px system-ui,sans-serif;fill:var(--suave)}
+.flecha{stroke:#444;stroke-width:1.5;fill:none;marker-end:url(#punta)}
+.pistas{margin-top:10px;font-size:.92rem}
+.pista{margin:6px 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0}
+.bd{fill:var(--acento)}
+.bdt{font:700 12px system-ui,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.ver{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:#fff;color:var(--acento);cursor:pointer;margin-top:6px}
+.solucion{margin-top:8px;padding:10px 12px;background:var(--acento-suave);border-left:4px solid var(--acento);border-radius:0 6px 6px 0;font-size:.93rem}
+.solucion[hidden]{display:none}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msj{margin-top:10px;font-size:.92rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+table.dem{border-collapse:collapse;margin:8px 0;font-size:.9rem}
+table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-align:center}
+#comprobante{display:none}
+@media (max-width:600px){.ident{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main>*:not(#comprobante){display:none!important}
+  #comprobante{display:block!important}
+  #comprobante section{border:0;padding:0;margin:0 0 12px}
+  .c-tabla{width:100%;border-collapse:collapse}
+  .c-tabla td{border:1px solid #999;padding:5px 7px;vertical-align:top;font-size:10pt}
+  .c-tabla td:first-child{width:30%;font-weight:600}
+  svg{max-height:15cm}
+}
+.caja.gris{fill:#ecebe4}
+.linea{stroke:#444;stroke-width:1.5;fill:none}
+section ol{margin:6px 0 0;padding-left:1.4em}
+section ol li{margin:2px 0}
+@media (max-width:600px){svg{min-width:0}}
+</style>
+</head>
+<body>
+<main>
+  <a href="guia6.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Guía 6</a>
+  <h1>Guía 6 · Problema 6 · Las máquinas y el técnico</h1>
+  <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
+
+  <section>
+    <h2><span class="num">0</span>Para el encabezado del PDF</h2>
+    <div class="ident">
+      <div><label for="nombre">Nombre y apellido</label><input id="nombre" autocomplete="name"></div>
+      <div><label for="legajo">Grupo</label><input id="legajo"></div>
+    </div>
+  </section>
+
+  <section class="enun">
+    <h2>El problema</h2>
+    <p>Una planta de envasado tiene seis máquinas iguales que trabajan las 24 horas, todos los días, y un único técnico de mantenimiento. Cada máquina que está funcionando <b>falla</b> al cabo de un tiempo exponencial, y una máquina que falló queda parada hasta que el técnico la repara. El técnico repara de a una máquina, por orden de falla, y la <b>reparación</b> dura un tiempo exponencial; mientras haya máquinas paradas esperando, no descansa. Cada hora que una máquina está parada (en reparación o esperando) se pierde producción, y el área de operaciones evalúa contratar un segundo técnico que trabaje en paralelo con el primero sobre la misma fila de máquinas.</p>
+    <table class="dem"><tr><th>Dato</th><th>Valor</th></tr><tr><td>Máquinas</td><td>6</td></tr><tr><td>Tiempo medio de funcionamiento hasta la falla (horas)</td><td>30</td></tr><tr><td>Tiempo medio de reparación (horas)</td><td>6</td></tr><tr><td>Costo de una máquina parada (pesos por máquina-hora)</td><td>10.000</td></tr><tr><td>Sueldo de un técnico (pesos por mes)</td><td>3.500.000</td></tr></table><p style="margin-bottom:2px"><b>Ítems del problema:</b></p><ol type="a"><li>Simular un año por próximo evento con un técnico, llevando la cantidad de máquinas paradas como estado, y calcular las máquinas-hora paradas por día, la cantidad media de máquinas paradas y la ocupación del técnico. Validar el código con dos casos extremos: reparación casi instantánea y una sola máquina.</li><li>Agregar un segundo técnico y calcular el costo mensual total (producción perdida más sueldos) con uno y con dos técnicos, con el error del ahorro a partir de 20 corridas con semillas distintas.</li><li>Hacer un barrido de la duración media de la reparación, de 2 a 10 horas, con la misma semilla, y determinar a partir de qué duración el segundo técnico se paga solo.</li></ol>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>La plantilla de diseño</h2>
+    <p class="sub" style="margin-bottom:12px">Escribí con tus palabras, una o dos oraciones por casillero. Cuando termines un casillero, podés ver la solución y compararla con lo tuyo.</p>
+    <div id="plantilla"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>El diagrama de flujo</h2>
+    <p class="sub" style="margin-bottom:6px">Faltan 11 cajas del diagrama, las numeradas. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <div class="banco" id="banco"></div>
+    <svg id="diagrama" viewBox="0 0 960 710" role="img" aria-label="Diagrama de flujo de las máquinas con un técnico">
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <g class="slot" data-slot="ini"><rect class="hueco" x="250" y="8" width="460" height="52" rx="26"/><text class="txt" x="480" y="34"></text></g>
+      <polygon class="caja" points="480,88 630,120 480,152 330,120"/><text class="txt" x="480" y="120">¿próximo evento antes de T?</text>
+      <g class="slot" data-slot="av"><rect class="hueco" x="310" y="180" width="340" height="52"/><text class="txt" x="480" y="206"></text></g>
+      <polygon class="caja" points="480,257 600,285 480,313 360,285"/><text class="txt" x="480" y="285">¿qué evento es?</text>
+      <g class="slot" data-slot="res"><rect class="hueco" x="660" y="96" width="240" height="48"/><text class="txt" x="780" y="120"></text></g>
+      <rect class="caja" x="660" y="158" width="240" height="44"/><text class="txt" x="780" y="180">Costo mensual con s técnicos</text>
+      <g class="slot" data-slot="cruce"><rect class="hueco" x="660" y="216" width="240" height="44"/><text class="txt" x="780" y="238"></text></g>
+      <rect class="caja" x="90" y="338" width="300" height="44"/><text class="txt" x="240" y="360">Falla de cual: N ← N + 1</text>
+      <g class="slot" data-slot="l1b"><rect class="hueco" x="90" y="403" width="300" height="44"/><text class="txt" x="240" y="425"></text></g>
+      <g class="slot" data-slot="ld"><polygon class="hueco" points="240,472 350,500 240,528 130,500"/><text class="txt" x="240" y="500"></text></g>
+      <rect class="caja" x="25" y="559" width="210" height="52"/><text class="txt" x="130" y="585"><tspan x="130" dy="-9">el técnico la toma;</tspan><tspan x="130" dy="18">programar el fin</tspan></text>
+      <g class="slot" data-slot="lb"><rect class="hueco" x="245" y="559" width="210" height="52"/><text class="txt" x="350" y="585"></text></g>
+      <rect class="caja" x="560" y="338" width="320" height="44"/><text class="txt" x="720" y="360">Fin de reparación: N ← N − 1</text>
+      <g class="slot" data-slot="f1b"><rect class="hueco" x="560" y="403" width="320" height="44"/><text class="txt" x="720" y="425"></text></g>
+      <g class="slot" data-slot="fd"><polygon class="hueco" points="720,472 830,500 720,528 610,500"/><text class="txt" x="720" y="500"></text></g>
+      <g class="slot" data-slot="fa"><rect class="hueco" x="505" y="559" width="210" height="52"/><text class="txt" x="610" y="585"></text></g>
+      <g class="slot" data-slot="fb"><rect class="hueco" x="725" y="559" width="210" height="52"/><text class="txt" x="830" y="585"></text></g>
+      <path class="flecha" d="M480 60 L480 88"/>
+      <path class="flecha" d="M480 152 L480 180"/>
+      <path class="flecha" d="M480 232 L480 257"/>
+      <path class="flecha" d="M360 285 L240 285 L240 338"/>
+      <path class="flecha" d="M600 285 L720 285 L720 338"/>
+      <path class="flecha" d="M630 120 L660 120"/>
+      <path class="flecha" d="M780 144 L780 158"/>
+      <path class="flecha" d="M780 202 L780 216"/>
+      <path class="flecha" d="M240 382 L240 403"/>
+      <path class="flecha" d="M240 447 L240 472"/>
+      <path class="flecha" d="M130 500 L130 559"/>
+      <path class="flecha" d="M350 500 L350 559"/>
+      <path class="flecha" d="M720 382 L720 403"/>
+      <path class="flecha" d="M720 447 L720 472"/>
+      <path class="flecha" d="M610 500 L610 559"/>
+      <path class="flecha" d="M830 500 L830 559"/>
+      <path class="linea" d="M130 611 L130 675"/>
+      <path class="linea" d="M350 611 L350 675"/>
+      <path class="linea" d="M610 611 L610 675"/>
+      <path class="linea" d="M830 611 L830 675"/>
+      <path class="linea" d="M830 675 L8 675"/>
+      <path class="flecha" d="M8 675 L8 120 L330 120"/>
+      <text class="etq" x="488" y="168">sí</text>
+      <text class="etq" x="300" y="277">falla</text>
+      <text class="etq" x="642" y="277">fin</text>
+      <text class="etq" x="636" y="112">no</text>
+      <text class="etq" x="100" y="520">sí</text>
+      <text class="etq" x="356" y="520">no</text>
+      <text class="etq" x="580" y="520">sí</text>
+      <text class="etq" x="836" y="520">no</text>
+      </svg>
+    <div class="fila" style="margin-top:12px">
+      <button class="accion sec" id="verificar">Verificar el diagrama</button>
+      <span class="msj" id="msjDiag"></span>
+    </div>
+    <div class="pistas" id="pistas"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Guardar</h2>
+    <p class="sub" style="margin-bottom:10px">En la ventana de impresión elegí <b>Guardar como PDF</b>. Lo que escribiste también queda guardado en este navegador.</p>
+    <div class="fila"><button class="accion" id="descargar">Descargar en PDF</button></div>
+  </section>
+
+  <div id="comprobante"></div>
+  <p class="volver-pie"><a href="guia6.html" style="color:#1d4e89;text-decoration:none">← Volver a la Guía 6</a></p>
+</main>
+
+<script>
+const ID = "g6p6";
+const TITULO = "Guía 6 · Problema 6 · Las máquinas y el técnico";
+const SLOTS = ["ini", "res", "av", "cruce", "l1b", "f1b", "ld", "fd", "lb", "fa", "fb"];
+const PISTAS = {"ini": "Todas las máquinas arrancan funcionando: hay que dejar sorteada la falla de cada una.", "av": "Antes de mover el reloj se suman dos áreas: las máquinas paradas y las horas con el técnico trabajando.", "res": "Lo que se informa al final se acumuló como áreas durante la corrida.", "cruce": "No hay fórmula: se valida llevando el sistema a situaciones en las que se sabe qué tiene que pasar.", "l1b": "Una máquina parada no puede volver a fallar hasta que la reparen.", "ld": "Después de sumar una parada: ¿el técnico estaba libre?", "lb": "Si el técnico está ocupado, ¿qué se guarda en la fila?", "f1b": "La máquina reparada vuelve a trabajar: ¿qué evento le queda pendiente?", "fd": "Terminó una reparación: ¿hay máquinas esperando?", "fa": "Si hay fila, ¿qué pasa con la primera máquina parada?", "fb": "Si no hay fila, no queda ninguna reparación en curso."};
+const CASILLEROS = [
+  ["unidad", "Unidad de flujo", "quién recorre el sistema", "La máquina: no llega de afuera. Son seis, que pasan de funcionar a estar paradas y vuelven."],
+  ["estado", "Estado", "las variables que describen el sistema en cada instante, con su unidad", "N(t): máquinas paradas (en reparación más esperando), en máquinas; el vector fallas, la próxima falla de cada máquina (∞ si está parada); qué máquina se repara; y la fila de máquinas paradas, por orden de falla."],
+  ["eventos", "Eventos: qué cambia", "cada evento y cómo modifica el estado", "Falla la máquina cual: N sube en 1. Termina una reparación: N baja en 1 y la máquina vuelve a funcionar."],
+  ["programa", "Qué programa y qué cancela", "qué eventos futuros dispara cada evento, y cuáles deja sin sentido", "La falla cancela la próxima falla de esa máquina (fallas[cual] = np.inf) y, si el técnico estaba libre, programa el fin de la reparación. El fin programa la próxima falla de la máquina reparada y, si hay fila, el fin de la siguiente; si no, cancela el fin."],
+  ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Tiempo hasta la falla de cada máquina: exponencial de media 30 horas. Duración de la reparación: exponencial de media 6 horas (de 2 a 10 horas en el barrido)."],
+  ["medidas", "Medidas", "qué se acumula durante la corrida y en qué medida se convierte al final", "El área bajo N(t), que son máquinas-hora paradas, y las horas con el técnico reparando (min(N, s) con dos técnicos). Al final: máquinas-hora paradas por día, N medio, ocupación y costo mensual (producción perdida más sueldos)."],
+  ["horizonte", "Horizonte y parada", "cuánto se simula y cuál es la condición para parar", "Un año: T = 365 × 24 = 8.760 horas. Se para cuando el próximo evento cae después de T."],
+  ["validacion", "Validación", "con qué se cruza el resultado", "No hay fórmula en la clase para este sistema. Se valida con dos casos extremos: reparación casi instantánea (casi ninguna máquina parada) y una sola máquina (nunca más de una parada)."],
+  ["experimento", "Experimento", "qué se repite por fuera de la simulación", "Uno contra dos técnicos con la misma semilla; 20 corridas con semillas distintas para el error del ahorro; y el barrido de la duración media de la reparación, de 2 a 10 horas, con la misma semilla."]
+];
+const FICHAS = [
+  ["ini", "Inicializar: t = 0, N = 0, una falla por máquina"],
+  ["av", "Sumar N y las horas del técnico; avanzar"],
+  ["res", "Resumen: N medio, ocupación"],
+  ["cruce", "Cruce: casos extremos"],
+  ["l1b", "fallas[cual] = ∞ (parada, no falla)"],
+  ["ld", "¿N = 1?"],
+  ["lb", "cual va a la fila"],
+  ["f1b", "programar nueva falla de la reparada"],
+  ["fd", "¿N > 0?"],
+  ["fa", "toma la primera de la fila"],
+  ["fb", "prox_fin = ∞ (técnico libre)"],
+  ["x1", "¿N = 0?"],
+  ["x2", "fallas[cual] = t + falla (reprogramar)"],
+  ["x3", "cual vuelve a funcionar"],
+  ["x4", "Cruce: reparación de 6 horas"],
+  ["x5", "programar nueva falla de la que falló"]
+];
+const ORDEN = ["cruce", "lb", "x4", "ini", "x3", "fb", "x1", "fa", "fd", "av", "ld", "res", "l1b", "x2", "f1b", "x5"];
+
+let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const texto = k => FICHAS.find(f => f[0] === k)[1];
+
+// identificación
+for (const k of ["nombre", "legajo"]) {
+  const el = document.getElementById(k);
+  el.value = estado[k];
+  el.addEventListener("input", () => { estado[k] = el.value; guardar(); });
+}
+
+// plantilla
+const cont = document.getElementById("plantilla");
+for (const [k, tit, ay, sol] of CASILLEROS) {
+  const d = document.createElement("div");
+  d.className = "casillero";
+  d.innerHTML = `<label for="c_${k}">${tit}<span class="ayuda">${ay}</span></label><textarea id="c_${k}"></textarea>
+    <button type="button" class="ver" aria-expanded="false">Ver solución</button>
+    <div class="solucion" hidden></div>`;
+  cont.appendChild(d);
+  const ta = d.querySelector("textarea");
+  ta.value = estado.txt[k] || "";
+  ta.addEventListener("input", () => { estado.txt[k] = ta.value; guardar(); });
+  const bv = d.querySelector(".ver"), cs = d.querySelector(".solucion");
+  cs.textContent = sol;
+  bv.addEventListener("click", () => {
+    cs.hidden = !cs.hidden;
+    bv.textContent = cs.hidden ? "Ver solución" : "Ocultar solución";
+    bv.setAttribute("aria-expanded", String(!cs.hidden));
+  });
+}
+
+// diagrama
+const banco = document.getElementById("banco");
+let elegida = null;
+function pintarBanco() {
+  banco.innerHTML = "";
+  const usadas = Object.values(estado.slots);
+  for (const k of ORDEN) {
+    const b = document.createElement("button");
+    b.className = "ficha" + (usadas.includes(k) ? " usada" : "") + (elegida === k ? " elegida" : "");
+    b.textContent = texto(k);
+    b.draggable = true;
+    b.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", k));
+    b.addEventListener("click", () => { elegida = elegida === k ? null : k; pintarBanco(); });
+    banco.appendChild(b);
+  }
+}
+function poner(slot, k) {
+  for (const s in estado.slots) if (estado.slots[s] === k) delete estado.slots[s];
+  if (k) estado.slots[slot] = k; else delete estado.slots[slot];
+  estado.verificado = false;
+  elegida = null;
+  guardar(); pintarSlots(); pintarBanco();
+  document.getElementById("msjDiag").textContent = "";
+  document.getElementById("pistas").innerHTML = "";
+}
+function pintarSlots(marcar) {
+  document.querySelectorAll(".slot").forEach(g => {
+    const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
+    const k = estado.slots[s];
+    t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
+    h.classList.toggle("lleno", !!k);
+    h.classList.toggle("bien", !!marcar && k === s);
+    h.classList.toggle("malo", !!marcar && !!k && k !== s);
+  });
+}
+document.querySelectorAll(".slot").forEach(g => {
+  const s = g.dataset.slot, h = g.querySelector(".hueco");
+  g.addEventListener("click", () => { if (elegida) poner(s, elegida); else if (estado.slots[s]) poner(s, null); });
+  g.addEventListener("dragover", e => { e.preventDefault(); h.classList.add("sobre"); });
+  g.addEventListener("dragleave", () => h.classList.remove("sobre"));
+  g.addEventListener("drop", e => { e.preventDefault(); h.classList.remove("sobre"); poner(s, e.dataTransfer.getData("text/plain")); });
+});
+document.getElementById("verificar").addEventListener("click", () => {
+  const m = document.getElementById("msjDiag");
+  const llenos = SLOTS.filter(s => estado.slots[s]).length;
+  if (llenos === 0) { m.className = "msj mal"; m.textContent = "Todavía no pusiste ninguna ficha."; pintarSlots(); return; }
+  const buenos = SLOTS.filter(s => estado.slots[s] === s).length;
+  const malos = llenos - buenos, vacios = SLOTS.length - llenos;
+  pintarSlots(true);
+  mostrarPistas();
+  estado.verificado = buenos === SLOTS.length;
+  guardar();
+  m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
+  m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué eventos deja programados o cancelados cada evento y qué pasa con el técnico y con la fila, y probá de nuevo.";
+});
+
+// pistas: una por hueco equivocado, con el número del hueco
+function mostrarPistas() {
+  const c = document.getElementById("pistas");
+  c.innerHTML = "";
+  SLOTS.forEach((s, i) => {
+    if (estado.slots[s] && estado.slots[s] !== s) {
+      const d = document.createElement("div");
+      d.className = "pista";
+      d.textContent = `Pista para el hueco ${i + 1}: ${PISTAS[s]}`;
+      c.appendChild(d);
+    }
+  });
+}
+// números sobre los huecos, en el orden de SLOTS
+SLOTS.forEach((s, i) => {
+  const g = document.querySelector(`.slot[data-slot="${s}"]`), bb = g.querySelector(".hueco").getBBox();
+  const NS = "http://www.w3.org/2000/svg";
+  const c = document.createElementNS(NS, "circle"), t = document.createElementNS(NS, "text");
+  c.setAttribute("class", "bd"); c.setAttribute("cx", bb.x); c.setAttribute("cy", bb.y); c.setAttribute("r", 10);
+  t.setAttribute("class", "bdt"); t.setAttribute("x", bb.x); t.setAttribute("y", bb.y); t.textContent = i + 1;
+  g.appendChild(c); g.appendChild(t);
+});
+
+// comprobante
+const btn = document.getElementById("descargar");
+const esc = s => (s || "").replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+btn.addEventListener("click", () => {
+  const ahora = new Date().toLocaleString("es-AR");
+  const filas = CASILLEROS.map(([k, t]) => `<tr><td>${t}</td><td>${esc(estado.txt[k]).replace(/\n/g, "<br>")}</td></tr>`).join("");
+  pintarSlots(estado.verificado);
+  const svg = document.getElementById("diagrama").outerHTML;
+  document.getElementById("comprobante").innerHTML =
+    `<section><h1>${TITULO}</h1><p>${esc(estado.nombre)} · Grupo ${esc(estado.legajo)} · ${ahora}</p>
+     <table class="c-tabla">${filas}</table></section>
+     <section>${svg}</section>`;
+  window.print();
+});
+
+pintarBanco(); pintarSlots(estado.verificado);
+</script>
+</body>
+</html>

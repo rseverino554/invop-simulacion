@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 6 · Problema 8 · La mesa de ayuda IT</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
+.enun{font-size:.95rem}
+.ident{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-weight:600;font-size:.92rem;display:block;margin-bottom:4px}
+.ayuda{font-weight:400;color:var(--suave);font-size:.85rem;display:block}
+input,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.casillero{margin-bottom:14px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:10px;border:1px dashed var(--linea);border-radius:8px;min-height:52px}
+.ficha{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--acento);border-radius:999px;cursor:grab}
+.ficha.elegida{background:var(--acento);color:#fff}
+.ficha.usada{opacity:.35}
+svg{width:100%;height:auto;display:block}
+.caja{fill:#fff;stroke:#444;stroke-width:1.5}
+.hueco{fill:#fafafa;stroke:var(--acento);stroke-width:2;stroke-dasharray:6 4;cursor:pointer}
+.hueco.lleno{stroke-dasharray:none;fill:var(--acento-suave)}
+.hueco.bien{stroke:var(--ok);fill:var(--ok-suave)}
+.hueco.malo{stroke:#e3a09b;fill:var(--mal-suave)}
+.hueco.sobre{fill:#fff6d6}
+.txt{font:15px system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.etq{font:12px system-ui,sans-serif;fill:var(--suave)}
+.flecha{stroke:#444;stroke-width:1.5;fill:none;marker-end:url(#punta)}
+.pistas{margin-top:10px;font-size:.92rem}
+.pista{margin:6px 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0}
+.bd{fill:var(--acento)}
+.bdt{font:700 12px system-ui,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.ver{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:#fff;color:var(--acento);cursor:pointer;margin-top:6px}
+.solucion{margin-top:8px;padding:10px 12px;background:var(--acento-suave);border-left:4px solid var(--acento);border-radius:0 6px 6px 0;font-size:.93rem}
+.solucion[hidden]{display:none}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msj{margin-top:10px;font-size:.92rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+table.dem{border-collapse:collapse;margin:8px 0;font-size:.9rem}
+table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-align:center}
+#comprobante{display:none}
+@media (max-width:600px){.ident{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main>*:not(#comprobante){display:none!important}
+  #comprobante{display:block!important}
+  #comprobante section{border:0;padding:0;margin:0 0 12px}
+  .c-tabla{width:100%;border-collapse:collapse}
+  .c-tabla td{border:1px solid #999;padding:5px 7px;vertical-align:top;font-size:10pt}
+  .c-tabla td:first-child{width:30%;font-weight:600}
+  svg{max-height:15cm}
+}
+.caja.gris{fill:#ecebe4}
+.linea{stroke:#444;stroke-width:1.5;fill:none}
+section ol{margin:6px 0 0;padding-left:1.4em}
+section ol li{margin:2px 0}
+@media (max-width:600px){svg{min-width:0}}
+</style>
+</head>
+<body>
+<main>
+  <a href="guia6.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Guía 6</a>
+  <h1>Guía 6 · Problema 8 · La mesa de ayuda IT</h1>
+  <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
+
+  <section>
+    <h2><span class="num">0</span>Para el encabezado del PDF</h2>
+    <div class="ident">
+      <div><label for="nombre">Nombre y apellido</label><input id="nombre" autocomplete="name"></div>
+      <div><label for="legajo">Grupo</label><input id="legajo"></div>
+    </div>
+  </section>
+
+  <section class="enun">
+    <h2>El problema</h2>
+    <p>Una empresa tiene una <b>mesa de ayuda</b> interna a la que los empleados mandan sus tickets (una clave bloqueada, un equipo que no imprime, un acceso que falta) por un canal único de chat. Los tickets llegan con <b>tiempo entre llegadas</b> exponencial, hoy a razón de 6 tickets por hora, y los atienden s técnicos idénticos: el primer ticket de la fila pasa al primer técnico que se libera. Hay dos tipos de ticket, con la fracción y la duración media de resolución de la primera tabla; en cada tipo la duración es exponencial. La mesa trabaja 8 horas por jornada, y los tickets que quedan sin atender al cierre se atienden a la mañana siguiente, así que a los fines de la simulación las jornadas se encadenan.</p>
+    <p>El área de sistemas tiene un <b>acuerdo de nivel de servicio</b> (SLA) con el resto de la empresa: no más del 10% de los tickets puede esperar más de 10 minutos antes de que un técnico lo tome. El SLA es una restricción dura, y la decisión de cuántos técnicos poner se toma sólo con el sueldo de la segunda tabla. La empresa está creciendo, y sistemas prevé que dentro de un año lleguen un 40% más de tickets que hoy.</p>
+    <table class="dem"><tr><th>Tipo de ticket</th><th>Fracción de los tickets</th><th>Duración media de la resolución (min)</th></tr><tr><td>Simple (clave, permiso, consulta)</td><td>0,5</td><td>4</td></tr><tr><td>Regular (equipo, instalación, red)</td><td>0,5</td><td>12</td></tr></table><table class="dem"><tr><th>Parámetro</th><th>Valor</th></tr><tr><td>Demanda actual (tickets por hora)</td><td>6</td></tr><tr><td>Demanda prevista en un año (tickets por hora)</td><td>8,4</td></tr><tr><td>Horas por jornada</td><td>8</td></tr><tr><td>Umbral del SLA (minutos de espera)</td><td>10</td></tr><tr><td>Fracción máxima de tickets fuera del SLA</td><td>0,10</td></tr><tr><td>Sueldo de un técnico (millones de pesos por mes)</td><td>2,5</td></tr></table><p style="margin-bottom:2px"><b>Ítems del problema:</b></p><ol type="a"><li>Con la demanda actual y s = 2 técnicos, simular 60 jornadas encadenadas y calcular Wq y la fracción de tickets fuera del SLA, con 20 réplicas (semillas 0 a 19) y el error estándar de cada medida. Validar el código con s = 1: comparar la espera media de las 20 réplicas con la fórmula de Pollaczek-Khinchine, con la media y la varianza de la mezcla.</li><li>Hacer un barrido de la demanda de 1 a 14 tickets por hora de a 1, para s = 1, 2 y 3, con las mismas 20 semillas en cada punto, y graficar Wq y la fracción fuera del SLA contra la demanda con barras de error, una curva por dotación. Determinar para qué demandas s = 1 no se simula, y por qué.</li><li>Para cada dotación, determinar la demanda a partir de la cual se rompe el SLA, y decidir cuántos técnicos hacen falta hoy y con la demanda prevista en un año, con el costo mensual en sueldos de cada decisión.</li></ol>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>La plantilla de diseño</h2>
+    <p class="sub" style="margin-bottom:12px">Escribí con tus palabras, una o dos oraciones por casillero. Cuando termines un casillero, podés ver la solución y compararla con lo tuyo.</p>
+    <div id="plantilla"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>El diagrama de flujo</h2>
+    <p class="sub" style="margin-bottom:6px">Faltan 14 cajas del diagrama, las numeradas. Los bucles de réplicas, demandas y dotaciones están por fuera de la corrida. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <div class="banco" id="banco"></div>
+    <svg id="diagrama" viewBox="0 0 760 1220" role="img" aria-label="Diagrama de flujo del barrido de la mesa de ayuda IT">
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <g class="slot" data-slot="ini"><rect class="hueco" x="110" y="12" width="440" height="44" rx="22"/><text class="txt" x="330" y="34"></text></g>
+      <rect class="caja" x="110" y="82" width="440" height="44"/><text class="txt" x="330" y="104">Tomar la dotación s siguiente</text>
+      <g class="slot" data-slot="t1"><rect class="hueco" x="110" y="152" width="440" height="44"/><text class="txt" x="330" y="174"></text></g>
+      <g class="slot" data-slot="fil"><polygon class="hueco" points="330,230 480,262 330,294 180,262"/><text class="txt" x="330" y="262"></text></g>
+      <rect class="caja" x="15" y="236" width="130" height="52"/><text class="txt" x="80" y="262"><tspan x="80" dy="-9">Marcar punto</tspan><tspan x="80" dy="18">saturado</tspan></text>
+      <g class="slot" data-slot="t2"><rect class="hueco" x="110" y="328" width="440" height="44"/><text class="txt" x="330" y="350"></text></g>
+      <g class="slot" data-slot="cor"><rect class="hueco" x="110" y="398" width="440" height="52"/><text class="txt" x="330" y="424"></text></g>
+      <g class="slot" data-slot="g"><rect class="hueco" x="110" y="478" width="440" height="44"/><text class="txt" x="330" y="500"></text></g>
+      <g class="slot" data-slot="q2"><polygon class="hueco" points="330,552 450,580 330,608 210,580"/><text class="txt" x="330" y="580"></text></g>
+      <g class="slot" data-slot="c2"><rect class="hueco" x="110" y="638" width="440" height="44"/><text class="txt" x="330" y="660"></text></g>
+      <g class="slot" data-slot="g2"><rect class="hueco" x="110" y="708" width="440" height="44"/><text class="txt" x="330" y="730"></text></g>
+      <g class="slot" data-slot="q1"><polygon class="hueco" points="330,780 450,808 330,836 210,808"/><text class="txt" x="330" y="808"></text></g>
+      <g class="slot" data-slot="q0"><polygon class="hueco" points="330,860 450,888 330,916 210,888"/><text class="txt" x="330" y="888"></text></g>
+      <g class="slot" data-slot="res"><rect class="hueco" x="110" y="946" width="440" height="44"/><text class="txt" x="330" y="968"></text></g>
+      <g class="slot" data-slot="cruce"><rect class="hueco" x="110" y="1016" width="440" height="44"/><text class="txt" x="330" y="1038"></text></g>
+      <g class="slot" data-slot="dec"><rect class="hueco" x="110" y="1086" width="440" height="44"/><text class="txt" x="330" y="1108"></text></g>
+      <rect class="caja" x="110" y="1156" width="440" height="44"/><text class="txt" x="330" y="1178">Costo mensual en sueldos: s × 2,5 millones</text>
+      <path class="flecha" d="M330 56 L330 82"/>
+      <path class="flecha" d="M330 126 L330 152"/>
+      <path class="flecha" d="M330 196 L330 230"/>
+      <path class="flecha" d="M330 372 L330 398"/>
+      <path class="flecha" d="M330 450 L330 478"/>
+      <path class="flecha" d="M330 522 L330 552"/>
+      <path class="flecha" d="M330 682 L330 708"/>
+      <path class="flecha" d="M330 752 L330 780"/>
+      <path class="flecha" d="M330 836 L330 860"/>
+      <path class="flecha" d="M330 916 L330 946"/>
+      <path class="flecha" d="M330 990 L330 1016"/>
+      <path class="flecha" d="M330 1060 L330 1086"/>
+      <path class="flecha" d="M330 1130 L330 1156"/>
+      <path class="flecha" d="M330 294 L330 328"/>
+      <path class="flecha" d="M180 262 L145 262"/>
+      <path class="flecha" d="M80 288 L80 808 L210 808"/>
+      <path class="flecha" d="M330 608 L330 638"/>
+      <path class="flecha" d="M450 580 L600 580 L600 350 L550 350"/>
+      <path class="flecha" d="M450 808 L650 808 L650 174 L550 174"/>
+      <path class="flecha" d="M450 888 L700 888 L700 104 L550 104"/>
+      <text class="etq" x="338" y="312">sí</text>
+      <text class="etq" x="160" y="254">no</text>
+      <text class="etq" x="338" y="622">no</text>
+      <text class="etq" x="452" y="572">sí</text>
+      <text class="etq" x="452" y="800">sí</text>
+      <text class="etq" x="452" y="880">sí</text>
+      <text class="etq" x="338" y="922">no</text>
+      <text class="etq" x="338" y="852">no</text>
+      </svg>
+    <div class="fila" style="margin-top:12px">
+      <button class="accion sec" id="verificar">Verificar el diagrama</button>
+      <span class="msj" id="msjDiag"></span>
+    </div>
+    <div class="pistas" id="pistas"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Guardar</h2>
+    <p class="sub" style="margin-bottom:10px">En la ventana de impresión elegí <b>Guardar como PDF</b>. Lo que escribiste también queda guardado en este navegador.</p>
+    <div class="fila"><button class="accion" id="descargar">Descargar en PDF</button></div>
+  </section>
+
+  <div id="comprobante"></div>
+  <p class="volver-pie"><a href="guia6.html" style="color:#1d4e89;text-decoration:none">← Volver a la Guía 6</a></p>
+</main>
+
+<script>
+const ID = "g6p8";
+const TITULO = "Guía 6 · Problema 8 · La mesa de ayuda IT";
+const SLOTS = ["ini", "t1", "fil", "t2", "cor", "g", "q2", "c2", "g2", "q1", "q0", "res", "cruce", "dec"];
+const PISTAS = {"ini": "Antes de los bucles hay que fijar qué demandas y qué dotaciones se van a recorrer.", "t1": "El bucle del medio recorre las demandas.", "fil": "Con pocos técnicos y mucha demanda la fila no se estabiliza: antes de simular hay que mirar la ocupación.", "t2": "El bucle de adentro usa una semilla distinta en cada réplica.", "cor": "Adentro de este bloque está todo lo que ya se resolvió en los mostradores.", "g": "De cada réplica salen dos números que la decisión necesita.", "q2": "Es el bucle más interno: ¿faltan réplicas de este punto?", "c2": "Las 20 réplicas de un punto se resumen en un promedio y en cuánto se parecen entre sí.", "g2": "Cada punto del barrido deja un resultado para los gráficos.", "q1": "Es el bucle del medio: ¿faltan demandas para esta dotación?", "q0": "Es el bucle de afuera: ¿faltan dotaciones?", "res": "De todo el barrido hay que sacar, para cada dotación, el quiebre del SLA.", "cruce": "Con un técnico existe una fórmula contra la cual se puede comparar.", "dec": "La respuesta al negocio es una cantidad de técnicos, hoy y con la demanda prevista."};
+const CASILLEROS = [
+  ["unidad", "Unidad de flujo", "quién recorre el sistema", "El ticket."],
+  ["estado", "Estado", "las variables que describen el sistema en cada instante, con su unidad", "El del problema 5: N(t) tickets en la mesa, en tickets; el vector fines, un fin por técnico; y la fila de horas de llegada."],
+  ["eventos", "Eventos: qué cambia", "cada evento y cómo modifica el estado", "Llega un ticket: N sube en 1. Un técnico termina un ticket: N baja en 1."],
+  ["programa", "Qué programa y qué cancela", "qué eventos futuros dispara cada evento, y cuáles deja sin sentido", "Lo mismo que en los mostradores: la llegada programa la siguiente y, con un técnico libre, el fin del ticket; el fin programa el del primero de la fila o libera al técnico."],
+  ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Tiempo entre llegadas: exponencial de media 60/λ minutos (λ = 6 tickets por hora hoy). Tipo: simple si rng.uniform() < 0.5. Duración: exponencial de media 4 o 12 minutos."],
+  ["medidas", "Medidas", "qué se acumula durante la corrida y en qué medida se convierte al final", "Por réplica, la espera de cada ticket en minutos (Wq y la fracción fuera del SLA) y la ocupación por técnico. Entre las 20 réplicas, la media y el error estándar de cada una."],
+  ["horizonte", "Horizonte y parada", "cuánto se simula y cuál es la condición para parar", "60 jornadas de 8 horas encadenadas: T = 28.800 minutos. Se para cuando el próximo evento cae después de T."],
+  ["validacion", "Validación", "con qué se cruza el resultado", "Con s = 1, la media de las 20 réplicas contra Pollaczek-Khinchine con la mezcla (media 8 minutos, varianza 96 minutos²); y la ocupación contra λ·8/s."],
+  ["experimento", "Experimento", "qué se repite por fuera del diagrama: réplicas, barridos, escenarios", "20 réplicas (semillas 0 a 19) por punto, y el barrido de la demanda de 1 a 14 tickets por hora para s = 1, 2 y 3. Con s = 1 no se simulan las demandas con ocupación λ·8/60 mayor o igual que 1, donde la fila crece sin límite."]
+];
+const FICHAS = [
+  ["ini", "Grilla: demanda de 1 a 14 por hora; s = 1, 2, 3"],
+  ["t1", "Tomar la demanda λ siguiente"],
+  ["fil", "¿ocupación menor que 1?"],
+  ["t2", "Tomar la semilla siguiente: r = 0, …, 19"],
+  ["cor", "Una corrida de 60 jornadas: el diagrama del problema 5"],
+  ["g", "Guardar Wq y la fracción fuera del SLA"],
+  ["q2", "¿quedan semillas?"],
+  ["c2", "Media y error estándar de las 20 réplicas"],
+  ["g2", "Guardar la media y el error de este punto"],
+  ["q1", "¿quedan demandas?"],
+  ["q0", "¿quedan dotaciones?"],
+  ["res", "Resumen: por s, demanda donde se rompe el SLA"],
+  ["cruce", "Cruce: s = 1 contra Pollaczek-Khinchine"],
+  ["dec", "Decisión: s mínimo que cumple hoy y en un año"],
+  ["x1", "Grilla: demanda de 1 a 8 por hora; s = 1, 2, 3"],
+  ["x2", "¿ocupación mayor que 1?"],
+  ["x3", "Media y desvío de una sola réplica"],
+  ["x4", "Cruce: s = 2 contra Pollaczek-Khinchine"],
+  ["x5", "Decisión: s máximo que cumple hoy y en un año"],
+  ["x6", "Guardar sólo Wq de la réplica"]
+];
+const ORDEN = ["x5", "x1", "q1", "cor", "t1", "x4", "dec", "t2", "fil", "c2", "x3", "x2", "res", "x6", "g2", "ini", "g", "q0", "q2", "cruce"];
+
+let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const texto = k => FICHAS.find(f => f[0] === k)[1];
+
+// identificación
+for (const k of ["nombre", "legajo"]) {
+  const el = document.getElementById(k);
+  el.value = estado[k];
+  el.addEventListener("input", () => { estado[k] = el.value; guardar(); });
+}
+
+// plantilla
+const cont = document.getElementById("plantilla");
+for (const [k, tit, ay, sol] of CASILLEROS) {
+  const d = document.createElement("div");
+  d.className = "casillero";
+  d.innerHTML = `<label for="c_${k}">${tit}<span class="ayuda">${ay}</span></label><textarea id="c_${k}"></textarea>
+    <button type="button" class="ver" aria-expanded="false">Ver solución</button>
+    <div class="solucion" hidden></div>`;
+  cont.appendChild(d);
+  const ta = d.querySelector("textarea");
+  ta.value = estado.txt[k] || "";
+  ta.addEventListener("input", () => { estado.txt[k] = ta.value; guardar(); });
+  const bv = d.querySelector(".ver"), cs = d.querySelector(".solucion");
+  cs.textContent = sol;
+  bv.addEventListener("click", () => {
+    cs.hidden = !cs.hidden;
+    bv.textContent = cs.hidden ? "Ver solución" : "Ocultar solución";
+    bv.setAttribute("aria-expanded", String(!cs.hidden));
+  });
+}
+
+// diagrama
+const banco = document.getElementById("banco");
+let elegida = null;
+function pintarBanco() {
+  banco.innerHTML = "";
+  const usadas = Object.values(estado.slots);
+  for (const k of ORDEN) {
+    const b = document.createElement("button");
+    b.className = "ficha" + (usadas.includes(k) ? " usada" : "") + (elegida === k ? " elegida" : "");
+    b.textContent = texto(k);
+    b.draggable = true;
+    b.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", k));
+    b.addEventListener("click", () => { elegida = elegida === k ? null : k; pintarBanco(); });
+    banco.appendChild(b);
+  }
+}
+function poner(slot, k) {
+  for (const s in estado.slots) if (estado.slots[s] === k) delete estado.slots[s];
+  if (k) estado.slots[slot] = k; else delete estado.slots[slot];
+  estado.verificado = false;
+  elegida = null;
+  guardar(); pintarSlots(); pintarBanco();
+  document.getElementById("msjDiag").textContent = "";
+  document.getElementById("pistas").innerHTML = "";
+}
+function pintarSlots(marcar) {
+  document.querySelectorAll(".slot").forEach(g => {
+    const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
+    const k = estado.slots[s];
+    t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
+    h.classList.toggle("lleno", !!k);
+    h.classList.toggle("bien", !!marcar && k === s);
+    h.classList.toggle("malo", !!marcar && !!k && k !== s);
+  });
+}
+document.querySelectorAll(".slot").forEach(g => {
+  const s = g.dataset.slot, h = g.querySelector(".hueco");
+  g.addEventListener("click", () => { if (elegida) poner(s, elegida); else if (estado.slots[s]) poner(s, null); });
+  g.addEventListener("dragover", e => { e.preventDefault(); h.classList.add("sobre"); });
+  g.addEventListener("dragleave", () => h.classList.remove("sobre"));
+  g.addEventListener("drop", e => { e.preventDefault(); h.classList.remove("sobre"); poner(s, e.dataTransfer.getData("text/plain")); });
+});
+document.getElementById("verificar").addEventListener("click", () => {
+  const m = document.getElementById("msjDiag");
+  const llenos = SLOTS.filter(s => estado.slots[s]).length;
+  if (llenos === 0) { m.className = "msj mal"; m.textContent = "Todavía no pusiste ninguna ficha."; pintarSlots(); return; }
+  const buenos = SLOTS.filter(s => estado.slots[s] === s).length;
+  const malos = llenos - buenos, vacios = SLOTS.length - llenos;
+  pintarSlots(true);
+  mostrarPistas();
+  estado.verificado = buenos === SLOTS.length;
+  guardar();
+  m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
+  m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué recorre cada bucle, qué se guarda en cada nivel y con qué se cruza y se decide al final, y probá de nuevo.";
+});
+
+// pistas: una por hueco equivocado, con el número del hueco
+function mostrarPistas() {
+  const c = document.getElementById("pistas");
+  c.innerHTML = "";
+  SLOTS.forEach((s, i) => {
+    if (estado.slots[s] && estado.slots[s] !== s) {
+      const d = document.createElement("div");
+      d.className = "pista";
+      d.textContent = `Pista para el hueco ${i + 1}: ${PISTAS[s]}`;
+      c.appendChild(d);
+    }
+  });
+}
+// números sobre los huecos, en el orden de SLOTS
+SLOTS.forEach((s, i) => {
+  const g = document.querySelector(`.slot[data-slot="${s}"]`), bb = g.querySelector(".hueco").getBBox();
+  const NS = "http://www.w3.org/2000/svg";
+  const c = document.createElementNS(NS, "circle"), t = document.createElementNS(NS, "text");
+  c.setAttribute("class", "bd"); c.setAttribute("cx", bb.x); c.setAttribute("cy", bb.y); c.setAttribute("r", 10);
+  t.setAttribute("class", "bdt"); t.setAttribute("x", bb.x); t.setAttribute("y", bb.y); t.textContent = i + 1;
+  g.appendChild(c); g.appendChild(t);
+});
+
+// comprobante
+const btn = document.getElementById("descargar");
+const esc = s => (s || "").replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+btn.addEventListener("click", () => {
+  const ahora = new Date().toLocaleString("es-AR");
+  const filas = CASILLEROS.map(([k, t]) => `<tr><td>${t}</td><td>${esc(estado.txt[k]).replace(/\n/g, "<br>")}</td></tr>`).join("");
+  pintarSlots(estado.verificado);
+  const svg = document.getElementById("diagrama").outerHTML;
+  document.getElementById("comprobante").innerHTML =
+    `<section><h1>${TITULO}</h1><p>${esc(estado.nombre)} · Grupo ${esc(estado.legajo)} · ${ahora}</p>
+     <table class="c-tabla">${filas}</table></section>
+     <section>${svg}</section>`;
+  window.print();
+});
+
+pintarBanco(); pintarSlots(estado.verificado);
+</script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía 6 · Problema 9 · La guardia de la clínica</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:20px;margin:0 0 20px}
+.enun{font-size:.95rem}
+.ident{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-weight:600;font-size:.92rem;display:block;margin-bottom:4px}
+.ayuda{font-weight:400;color:var(--suave);font-size:.85rem;display:block}
+input,textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.casillero{margin-bottom:14px}
+.banco{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;padding:10px;border:1px dashed var(--linea);border-radius:8px;min-height:52px}
+.ficha{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--acento);background:var(--acento-suave);color:var(--acento);border-radius:999px;cursor:grab}
+.ficha.elegida{background:var(--acento);color:#fff}
+.ficha.usada{opacity:.35}
+svg{width:100%;height:auto;display:block}
+.caja{fill:#fff;stroke:#444;stroke-width:1.5}
+.hueco{fill:#fafafa;stroke:var(--acento);stroke-width:2;stroke-dasharray:6 4;cursor:pointer}
+.hueco.lleno{stroke-dasharray:none;fill:var(--acento-suave)}
+.hueco.bien{stroke:var(--ok);fill:var(--ok-suave)}
+.hueco.malo{stroke:#e3a09b;fill:var(--mal-suave)}
+.hueco.sobre{fill:#fff6d6}
+.txt{font:15px system-ui,sans-serif;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.etq{font:12px system-ui,sans-serif;fill:var(--suave)}
+.flecha{stroke:#444;stroke-width:1.5;fill:none;marker-end:url(#punta)}
+.pistas{margin-top:10px;font-size:.92rem}
+.pista{margin:6px 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0}
+.bd{fill:var(--acento)}
+.bdt{font:700 12px system-ui,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+button.ver{font:inherit;font-size:.85rem;padding:4px 12px;border-radius:6px;border:1px solid var(--acento);background:#fff;color:var(--acento);cursor:pointer;margin-top:6px}
+.solucion{margin-top:8px;padding:10px 12px;background:var(--acento-suave);border-left:4px solid var(--acento);border-radius:0 6px 6px 0;font-size:.93rem}
+.solucion[hidden]{display:none}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msj{margin-top:10px;font-size:.92rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+table.dem{border-collapse:collapse;margin:8px 0;font-size:.9rem}
+table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-align:center}
+#comprobante{display:none}
+@media (max-width:600px){.ident{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main>*:not(#comprobante){display:none!important}
+  #comprobante{display:block!important}
+  #comprobante section{border:0;padding:0;margin:0 0 12px}
+  .c-tabla{width:100%;border-collapse:collapse}
+  .c-tabla td{border:1px solid #999;padding:5px 7px;vertical-align:top;font-size:10pt}
+  .c-tabla td:first-child{width:30%;font-weight:600}
+  svg{max-height:15cm}
+}
+.caja.gris{fill:#ecebe4}
+.linea{stroke:#444;stroke-width:1.5;fill:none}
+section ol{margin:6px 0 0;padding-left:1.4em}
+section ol li{margin:2px 0}
+@media (max-width:600px){svg{min-width:0}}
+</style>
+</head>
+<body>
+<main>
+  <a href="guia6.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Guía 6</a>
+  <h1>Guía 6 · Problema 9 · La guardia de la clínica</h1>
+  <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
+
+  <section>
+    <h2><span class="num">0</span>Para el encabezado del PDF</h2>
+    <div class="ident">
+      <div><label for="nombre">Nombre y apellido</label><input id="nombre" autocomplete="name"></div>
+      <div><label for="legajo">Grupo</label><input id="legajo"></div>
+    </div>
+  </section>
+
+  <section class="enun">
+    <h2>El problema</h2>
+    <p>La guardia de una clínica atiende las 24 horas, todos los días, con una <b>fila única</b> y s médicos idénticos: el primer paciente de la fila pasa al primer médico que se libera. Los pacientes llegan con <b>tiempo entre llegadas</b> exponencial, pero la tasa no es la misma a toda hora: hay una franja de <b>día</b>, de 8 a 20, y una de <b>noche</b>, de 20 a 8, con la tasa de noche mucho menor (segunda tabla). Hay dos niveles de complejidad, con la fracción y la duración media de la atención de la primera tabla; en cada nivel la duración es exponencial. La clínica fija un <b>objetivo de servicio</b>: no más del 10% de los pacientes espera más de 20 minutos antes de pasar con un médico, y lo quiere cumplir en las dos franjas por separado, contando a cada paciente en la franja en la que llegó. Hoy hay 2 médicos de guardia las 24 horas. Cada médico cobra un <b>honorario</b> por turno de 12 horas, y la dotación puede ser distinta por franja. Cuando empieza una franja con menos médicos, los que terminan su turno atienden al paciente que tienen en la mano y después no toman otro; cuando empieza una franja con más médicos, los que entran toman pacientes de la fila enseguida. Se simulan 8 semanas encadenadas, arrancando un día a las 8 con la guardia vacía.</p>
+    <table class="dem"><tr><th>Nivel de complejidad</th><th>Fracción de los pacientes</th><th>Duración media de la atención (min)</th></tr><tr><td>Leve</td><td>0,7</td><td>8</td></tr><tr><td>Compleja</td><td>0,3</td><td>20</td></tr></table><table class="dem"><tr><th>Dato</th><th>Valor</th></tr><tr><td>Pacientes por hora de día (8 a 20)</td><td>7</td></tr><tr><td>Pacientes por hora de noche (20 a 8)</td><td>1</td></tr><tr><td>Objetivo: fracción que espera más de 20 minutos, por franja</td><td>a lo sumo 0,10</td></tr><tr><td>Médicos de guardia hoy, las 24 horas</td><td>2</td></tr><tr><td>Honorario por médico y por turno de 12 horas (pesos)</td><td>120.000</td></tr></table><p style="margin-bottom:2px"><b>Ítems del problema:</b></p><ol type="a"><li>Con 2 médicos las 24 horas, simular las 8 semanas y calcular, por franja, la ocupación por médico, Wq y la fracción de pacientes fuera del objetivo, con el error estándar de 20 corridas. Validar el código con la misma tasa en las dos franjas contra el código de varios servidores del problema 5, y con un caso extremo.</li><li>Hallar la mínima dotación por franja (s de día, s de noche) que cumple el objetivo en las dos, y comparar su costo diario en honorarios con el de la mínima dotación fija las 24 horas.</li><li>Hacer un barrido de la tasa nocturna de 1 a 2 pacientes por hora de a 0,2, con las mismas 20 semillas, y determinar a partir de qué tasa hace falta un segundo médico de noche. Verificar que el Wq de día no cambia con la tasa nocturna.</li></ol>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>La plantilla de diseño</h2>
+    <p class="sub" style="margin-bottom:12px">Escribí con tus palabras, una o dos oraciones por casillero. Cuando termines un casillero, podés ver la solución y compararla con lo tuyo.</p>
+    <div id="plantilla"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>El diagrama de flujo</h2>
+    <p class="sub" style="margin-bottom:6px">Falta todo el diagrama menos la caja de Inicio: son 19 cajas, las numeradas. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <div class="banco" id="banco"></div>
+    <svg id="diagrama" viewBox="0 0 1000 910" role="img" aria-label="Diagrama de flujo de la guardia de la clínica">
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <rect class="caja" x="200" y="8" width="600" height="52" rx="26"/><text class="txt" x="500" y="34"><tspan x="500" dy="-9">Inicializar: t = 0 (las 8), N = 0, franja de día,</tspan><tspan x="500" dy="18">primera llegada sorteada, primer cambio en t = 12</tspan></text>
+      <g class="slot" data-slot="d0"><polygon class="hueco" points="500,88 670,120 500,152 330,120"/><text class="txt" x="500" y="120"></text></g>
+      <g class="slot" data-slot="res"><rect class="hueco" x="715" y="94" width="250" height="52"/><text class="txt" x="840" y="120"></text></g>
+      <g class="slot" data-slot="av"><rect class="hueco" x="240" y="180" width="520" height="52"/><text class="txt" x="500" y="206"></text></g>
+      <g class="slot" data-slot="d1"><polygon class="hueco" points="500,262 620,290 500,318 380,290"/><text class="txt" x="500" y="290"></text></g>
+      <g class="slot" data-slot="l1"><rect class="hueco" x="20" y="343" width="300" height="44"/><text class="txt" x="170" y="365"></text></g>
+      <g class="slot" data-slot="f1"><rect class="hueco" x="350" y="343" width="300" height="44"/><text class="txt" x="500" y="365"></text></g>
+      <g class="slot" data-slot="c1"><rect class="hueco" x="680" y="343" width="300" height="44"/><text class="txt" x="830" y="365"></text></g>
+      <g class="slot" data-slot="ld"><polygon class="hueco" points="170,417 280,445 170,473 60,445"/><text class="txt" x="170" y="445"></text></g>
+      <g class="slot" data-slot="la"><rect class="hueco" x="8" y="506" width="156" height="48"/><text class="txt" x="86" y="530"></text></g>
+      <g class="slot" data-slot="lb"><rect class="hueco" x="176" y="506" width="156" height="48"/><text class="txt" x="254" y="530"></text></g>
+      <g class="slot" data-slot="lp"><rect class="hueco" x="20" y="588" width="300" height="44"/><text class="txt" x="170" y="610"></text></g>
+      <g class="slot" data-slot="fd"><polygon class="hueco" points="500,417 645,445 500,473 355,445"/><text class="txt" x="500" y="445"></text></g>
+      <g class="slot" data-slot="fa"><rect class="hueco" x="338" y="506" width="156" height="48"/><text class="txt" x="416" y="530"></text></g>
+      <g class="slot" data-slot="fb"><rect class="hueco" x="506" y="506" width="156" height="48"/><text class="txt" x="584" y="530"></text></g>
+      <g class="slot" data-slot="c2"><rect class="hueco" x="680" y="408" width="300" height="44"/><text class="txt" x="830" y="430"></text></g>
+      <g class="slot" data-slot="c3"><rect class="hueco" x="680" y="473" width="300" height="44"/><text class="txt" x="830" y="495"></text></g>
+      <g class="slot" data-slot="c4"><rect class="hueco" x="680" y="538" width="300" height="44"/><text class="txt" x="830" y="560"></text></g>
+      <g class="slot" data-slot="de"><polygon class="hueco" points="500,712 640,740 500,768 360,740"/><text class="txt" x="500" y="740"></text></g>
+      <g class="slot" data-slot="du"><rect class="hueco" x="240" y="794" width="520" height="52"/><text class="txt" x="500" y="820"></text></g>
+      <path class="flecha" d="M500 60 L500 88"/>
+      <path class="flecha" d="M500 152 L500 180"/>
+      <path class="flecha" d="M670 120 L715 120"/>
+      <path class="flecha" d="M500 232 L500 262"/>
+      <path class="flecha" d="M380 290 L170 290 L170 343"/>
+      <path class="flecha" d="M500 318 L500 343"/>
+      <path class="flecha" d="M620 290 L830 290 L830 343"/>
+      <path class="flecha" d="M170 387 L170 417"/>
+      <path class="flecha" d="M60 445 L60 490 L86 490 L86 506"/>
+      <path class="flecha" d="M280 445 L280 490 L254 490 L254 506"/>
+      <path class="flecha" d="M86 554 L86 588"/>
+      <path class="flecha" d="M254 554 L254 588"/>
+      <path class="flecha" d="M500 387 L500 417"/>
+      <path class="flecha" d="M355 445 L355 490 L416 490 L416 506"/>
+      <path class="flecha" d="M645 445 L645 490 L584 490 L584 506"/>
+      <path class="flecha" d="M830 387 L830 408"/>
+      <path class="flecha" d="M830 452 L830 473"/>
+      <path class="flecha" d="M830 517 L830 538"/>
+      <path class="linea" d="M170 632 L170 700"/>
+      <path class="linea" d="M416 554 L416 700"/>
+      <path class="linea" d="M584 554 L584 700"/>
+      <path class="linea" d="M584 700 L170 700"/>
+      <path class="flecha" d="M500 700 L500 712"/>
+      <path class="flecha" d="M500 768 L500 794"/>
+      <path class="linea" d="M360 740 L8 740"/>
+      <path class="linea" d="M830 582 L830 885 L8 885"/>
+      <path class="linea" d="M500 846 L500 885"/>
+      <path class="flecha" d="M8 885 L8 120 L330 120"/>
+      <text class="etq" x="508" y="168">sí</text>
+      <text class="etq" x="676" y="112">no</text>
+      <text class="etq" x="260" y="282">llegada</text>
+      <text class="etq" x="508" y="336">fin</text>
+      <text class="etq" x="650" y="282">cambio de franja</text>
+      <text class="etq" x="34" y="463">sí</text>
+      <text class="etq" x="286" y="463">no</text>
+      <text class="etq" x="326" y="463">sí</text>
+      <text class="etq" x="652" y="463">no</text>
+      <text class="etq" x="508" y="782">sí</text>
+      <text class="etq" x="350" y="732">no</text>
+      </svg>
+    <div class="fila" style="margin-top:12px">
+      <button class="accion sec" id="verificar">Verificar el diagrama</button>
+      <span class="msj" id="msjDiag"></span>
+    </div>
+    <div class="pistas" id="pistas"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Guardar</h2>
+    <p class="sub" style="margin-bottom:10px">En la ventana de impresión elegí <b>Guardar como PDF</b>. Lo que escribiste también queda guardado en este navegador.</p>
+    <div class="fila"><button class="accion" id="descargar">Descargar en PDF</button></div>
+  </section>
+
+  <div id="comprobante"></div>
+  <p class="volver-pie"><a href="guia6.html" style="color:#1d4e89;text-decoration:none">← Volver a la Guía 6</a></p>
+</main>
+
+<script>
+const ID = "g6p9";
+const TITULO = "Guía 6 · Problema 9 · La guardia de la clínica";
+const SLOTS = ["d0", "res", "av", "d1", "l1", "f1", "c1", "c2", "ld", "fd", "c3", "la", "lb", "fa", "fb", "c4", "lp", "de", "du"];
+const PISTAS = {"d0": "Es el corte de todos los bucles de eventos.", "res": "Cada paciente se cuenta en la franja en la que llegó, no en la que lo atendieron.", "av": "El área se suma con los médicos que están atendiendo en este tramo, antes de mover el reloj.", "d1": "Esta guardia tiene un evento más que los mostradores.", "l1": "Llega un paciente: cambia el estado antes de ver si hay quién lo atienda.", "f1": "Un médico termina de atender: sale un paciente del sistema.", "c1": "Este evento no mueve a N, pero cambia las reglas del juego.", "ld": "Un paciente que llega sólo empieza si hay un médico de turno sin paciente.", "la": "Si hay médico libre, no espera.", "lb": "Si todos están ocupados, ¿dónde queda?", "lp": "La llegada siguiente se sortea con la tasa de la franja en curso.", "fd": "El médico que terminó sólo toma a otro si hay quién y si todavía le toca.", "fa": "Si hay fila y sigue de turno, ¿quién pasa?", "fb": "Si no toma a nadie, el médico queda sin paciente.", "c2": "La llegada que estaba programada se sorteó con la tasa de la franja anterior.", "c3": "Cuando entran médicos, la fila que dejó la franja anterior no puede esperar.", "c4": "Las franjas duran 12 horas.", "de": "Llegan acá una llegada con médico libre y un fin con fila, pero también los que no empiezan nada.", "du": "Se sortea el nivel de complejidad del paciente y su duración, y se programa el fin en su médico."};
+const CASILLEROS = [
+  ["unidad", "Unidad de flujo", "quién recorre el sistema", "El paciente."],
+  ["estado", "Estado", "las variables que describen el sistema en cada instante, con su unidad", "N(t): pacientes en la guardia, en pacientes (atendidos más en fila); la franja en curso, con su tasa y su cantidad de médicos de turno; el vector fines, un fin de atención por médico; y la fila de horas de llegada."],
+  ["eventos", "Eventos: qué cambia", "cada evento y cómo modifica el estado", "Llega un paciente: N sube en 1. Termina una atención: N baja en 1. Cambio de franja: cambian la tasa y los médicos de turno; N no cambia."],
+  ["programa", "Qué programa y qué cancela", "qué eventos futuros dispara cada evento, y cuáles deja sin sentido", "La llegada programa la siguiente con la tasa de la franja. El fin programa el del primero de la fila sólo si el médico sigue de turno. El cambio de franja cancela la próxima llegada y la vuelve a sortear con la tasa nueva (vale por la falta de memoria de la exponencial), pone a trabajar a los médicos que entran y programa el cambio siguiente."],
+  ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Tiempo entre llegadas: exponencial de tasa 7 por hora de día y 1 por hora de noche. Nivel: leve si rng.uniform() < 0.7. Duración: exponencial de media 8 o 20 minutos."],
+  ["medidas", "Medidas", "qué se acumula durante la corrida y en qué medida se convierte al final", "Por franja, el área de médicos atendiendo (ocupación por médico = área / (s·T/2)); la espera de cada paciente y su hora de llegada, para contarlo en la franja en la que llegó: Wq y la fracción que espera más de 20 minutos."],
+  ["horizonte", "Horizonte y parada", "cuánto se simula y cuál es la condición para parar", "8 semanas encadenadas: T = 1.344 horas, arrancando a las 8 con la guardia vacía. Se para cuando el próximo evento cae después de T."],
+  ["validacion", "Validación", "con qué se cruza el resultado", "Con la misma tasa en las dos franjas, el código tiene que dar lo mismo que el de varios servidores del problema 5; y el caso extremo de 6 médicos las 24 horas, en el que nadie espera."],
+  ["experimento", "Experimento", "qué se repite por fuera del diagrama: réplicas, barridos, escenarios", "20 réplicas por configuración; la búsqueda de la mínima dotación por franja (s de día, s de noche); y el barrido de la tasa nocturna, de 1 a 2 por hora de a 0,2, con las mismas 20 semillas. Las réplicas y el barrido son bucles por fuera del diagrama."]
+];
+const FICHAS = [
+  ["d0", "¿próximo evento antes de T?"],
+  ["res", "Resumen por franja de llegada"],
+  ["av", "Sumar los médicos atendiendo al área; avanzar"],
+  ["d1", "¿qué evento es?"],
+  ["l1", "Llegada: N ← N + 1"],
+  ["f1", "Fin en quien: N ← N − 1"],
+  ["c1", "Cambio de franja: otra tasa y otro s"],
+  ["ld", "¿hay médico libre?"],
+  ["la", "empieza: espera 0"],
+  ["lb", "va a la fila"],
+  ["lp", "programar la próxima llegada"],
+  ["fd", "¿hay fila y sigue de turno?"],
+  ["fa", "entra el primero"],
+  ["fb", "liberar al médico"],
+  ["c2", "volver a sortear la llegada"],
+  ["c3", "los médicos libres toman de la fila"],
+  ["c4", "programar el próximo cambio en t + 12"],
+  ["de", "¿empieza una atención?"],
+  ["du", "Sortear nivel y duración; fines[quien] = t + dur"],
+  ["x1", "¿hay médico ocupado?"],
+  ["x2", "¿hay fila?"],
+  ["x3", "mantener la próxima llegada"],
+  ["x4", "Cambio de franja: sólo otra tasa"],
+  ["x5", "programar el próximo cambio en t + 24"],
+  ["x6", "Sumar los médicos de turno al área; avanzar"],
+  ["x7", "Resumen: promedio de las 24 horas"]
+];
+const ORDEN = ["lp", "fb", "x1", "lb", "x2", "x6", "de", "fd", "c2", "x4", "c1", "d0", "x7", "ld", "d1", "av", "la", "x5", "res", "l1", "x3", "fa", "c4", "du", "c3", "f1"];
+
+let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+const texto = k => FICHAS.find(f => f[0] === k)[1];
+
+// identificación
+for (const k of ["nombre", "legajo"]) {
+  const el = document.getElementById(k);
+  el.value = estado[k];
+  el.addEventListener("input", () => { estado[k] = el.value; guardar(); });
+}
+
+// plantilla
+const cont = document.getElementById("plantilla");
+for (const [k, tit, ay, sol] of CASILLEROS) {
+  const d = document.createElement("div");
+  d.className = "casillero";
+  d.innerHTML = `<label for="c_${k}">${tit}<span class="ayuda">${ay}</span></label><textarea id="c_${k}"></textarea>
+    <button type="button" class="ver" aria-expanded="false">Ver solución</button>
+    <div class="solucion" hidden></div>`;
+  cont.appendChild(d);
+  const ta = d.querySelector("textarea");
+  ta.value = estado.txt[k] || "";
+  ta.addEventListener("input", () => { estado.txt[k] = ta.value; guardar(); });
+  const bv = d.querySelector(".ver"), cs = d.querySelector(".solucion");
+  cs.textContent = sol;
+  bv.addEventListener("click", () => {
+    cs.hidden = !cs.hidden;
+    bv.textContent = cs.hidden ? "Ver solución" : "Ocultar solución";
+    bv.setAttribute("aria-expanded", String(!cs.hidden));
+  });
+}
+
+// diagrama
+const banco = document.getElementById("banco");
+let elegida = null;
+function pintarBanco() {
+  banco.innerHTML = "";
+  const usadas = Object.values(estado.slots);
+  for (const k of ORDEN) {
+    const b = document.createElement("button");
+    b.className = "ficha" + (usadas.includes(k) ? " usada" : "") + (elegida === k ? " elegida" : "");
+    b.textContent = texto(k);
+    b.draggable = true;
+    b.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", k));
+    b.addEventListener("click", () => { elegida = elegida === k ? null : k; pintarBanco(); });
+    banco.appendChild(b);
+  }
+}
+function poner(slot, k) {
+  for (const s in estado.slots) if (estado.slots[s] === k) delete estado.slots[s];
+  if (k) estado.slots[slot] = k; else delete estado.slots[slot];
+  estado.verificado = false;
+  elegida = null;
+  guardar(); pintarSlots(); pintarBanco();
+  document.getElementById("msjDiag").textContent = "";
+  document.getElementById("pistas").innerHTML = "";
+}
+function pintarSlots(marcar) {
+  document.querySelectorAll(".slot").forEach(g => {
+    const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
+    const k = estado.slots[s];
+    t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
+    h.classList.toggle("lleno", !!k);
+    h.classList.toggle("bien", !!marcar && k === s);
+    h.classList.toggle("malo", !!marcar && !!k && k !== s);
+  });
+}
+document.querySelectorAll(".slot").forEach(g => {
+  const s = g.dataset.slot, h = g.querySelector(".hueco");
+  g.addEventListener("click", () => { if (elegida) poner(s, elegida); else if (estado.slots[s]) poner(s, null); });
+  g.addEventListener("dragover", e => { e.preventDefault(); h.classList.add("sobre"); });
+  g.addEventListener("dragleave", () => h.classList.remove("sobre"));
+  g.addEventListener("drop", e => { e.preventDefault(); h.classList.remove("sobre"); poner(s, e.dataTransfer.getData("text/plain")); });
+});
+document.getElementById("verificar").addEventListener("click", () => {
+  const m = document.getElementById("msjDiag");
+  const llenos = SLOTS.filter(s => estado.slots[s]).length;
+  if (llenos === 0) { m.className = "msj mal"; m.textContent = "Todavía no pusiste ninguna ficha."; pintarSlots(); return; }
+  const buenos = SLOTS.filter(s => estado.slots[s] === s).length;
+  const malos = llenos - buenos, vacios = SLOTS.length - llenos;
+  pintarSlots(true);
+  mostrarPistas();
+  estado.verificado = buenos === SLOTS.length;
+  guardar();
+  m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
+  m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué hace cada evento sobre el estado, cuándo se programa o se cancela algo, y qué pasa con la franja y la fila, y probá de nuevo.";
+});
+
+// pistas: una por hueco equivocado, con el número del hueco
+function mostrarPistas() {
+  const c = document.getElementById("pistas");
+  c.innerHTML = "";
+  SLOTS.forEach((s, i) => {
+    if (estado.slots[s] && estado.slots[s] !== s) {
+      const d = document.createElement("div");
+      d.className = "pista";
+      d.textContent = `Pista para el hueco ${i + 1}: ${PISTAS[s]}`;
+      c.appendChild(d);
+    }
+  });
+}
+// números sobre los huecos, en el orden de SLOTS
+SLOTS.forEach((s, i) => {
+  const g = document.querySelector(`.slot[data-slot="${s}"]`), bb = g.querySelector(".hueco").getBBox();
+  const NS = "http://www.w3.org/2000/svg";
+  const c = document.createElementNS(NS, "circle"), t = document.createElementNS(NS, "text");
+  c.setAttribute("class", "bd"); c.setAttribute("cx", bb.x); c.setAttribute("cy", bb.y); c.setAttribute("r", 10);
+  t.setAttribute("class", "bdt"); t.setAttribute("x", bb.x); t.setAttribute("y", bb.y); t.textContent = i + 1;
+  g.appendChild(c); g.appendChild(t);
+});
+
+// comprobante
+const btn = document.getElementById("descargar");
+const esc = s => (s || "").replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
+btn.addEventListener("click", () => {
+  const ahora = new Date().toLocaleString("es-AR");
+  const filas = CASILLEROS.map(([k, t]) => `<tr><td>${t}</td><td>${esc(estado.txt[k]).replace(/\n/g, "<br>")}</td></tr>`).join("");
+  pintarSlots(estado.verificado);
+  const svg = document.getElementById("diagrama").outerHTML;
+  document.getElementById("comprobante").innerHTML =
+    `<section><h1>${TITULO}</h1><p>${esc(estado.nombre)} · Grupo ${esc(estado.legajo)} · ${ahora}</p>
+     <table class="c-tabla">${filas}</table></section>
+     <section>${svg}</section>`;
+  window.print();
+});
+
+pintarBanco(); pintarSlots(estado.verificado);
+</script>
+</body>
+</html>
