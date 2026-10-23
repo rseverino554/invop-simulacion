@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code boot camp · Nivel 2</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.05rem;margin:0 0 8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.num{display:inline-grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.tema{color:var(--suave);font-weight:400;font-size:.9rem}
+.tipo{font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--acento);background:var(--acento-suave);border-radius:999px;padding:1px 9px}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:18px 20px;margin:0 0 16px}
+section.bien{border-color:var(--ok)}
+section.mal{border-color:#e3a09b}
+.frase{margin:0 0 10px}
+pre,.cod{margin:0;font:13.5px/1.45 ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;white-space:pre;overflow-x:auto}
+.ctx{background:#f1f0ea;border:1px solid var(--linea);border-radius:6px;padding:8px 10px;margin:0 0 10px}
+.ctx-t{font-size:.8rem;color:var(--suave);margin:0 0 4px}
+.codigo{background:#f1f0ea;border:1px solid var(--linea);border-radius:6px;padding:8px 10px;margin:0 0 12px}
+.opciones{display:grid;gap:8px}
+label.op{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border:1px solid var(--linea);border-radius:8px;background:#fff;cursor:pointer}
+label.op:hover{border-color:var(--acento)}
+label.op input{margin-top:4px;flex:none}
+label.op.elegida{border-color:var(--acento);background:var(--acento-suave)}
+label.op.bien{border-color:var(--ok);background:var(--ok-suave)}
+label.op.mal{border-color:#e3a09b;background:var(--mal-suave)}
+label.op .txt{font-size:.95rem}
+.pista{margin:10px 0 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0;font-size:.92rem}
+.bloque{display:flex;gap:10px;align-items:baseline;padding:4px 0}
+.letra{flex:none;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:var(--acento);color:#fff;font-weight:700;font-size:.85rem}
+.par{display:flex;gap:12px;align-items:center;padding:8px 12px;border:1px solid var(--linea);border-radius:8px;margin:0 0 8px}
+.par.bien{border-color:var(--ok);background:var(--ok-suave)}
+.par.mal{border-color:#e3a09b;background:var(--mal-suave)}
+.par .t{flex:1;font-size:.95rem}
+select{font:inherit;font-size:.9rem;padding:4px 6px;border:1px solid var(--linea);border-radius:6px;background:#fff}
+.hueco select{font-family:ui-monospace,Consolas,monospace;font-size:13px;margin:0 2px}
+.hueco select.bien{border-color:var(--ok);background:var(--ok-suave)}
+.hueco select.mal{border-color:#e3a09b;background:var(--mal-suave)}
+.linea{display:block;padding:1px 8px;border-radius:4px;cursor:pointer;border:1px solid transparent}
+.linea:hover{background:#e6e3d8}
+.linea.elegida{background:var(--acento-suave);border-color:var(--acento)}
+.linea.bien{background:var(--ok-suave);border-color:var(--ok)}
+.linea.mal{background:var(--mal-suave);border-color:#e3a09b}
+.paso{font-size:.85rem;color:var(--suave);margin:4px 0 6px}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+.msj{font-size:.95rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+@media (max-width:600px){.par{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<main>
+  <a href="bootcamp.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Code boot camp</a>
+  <h1>Code boot camp · Nivel 2</h1>
+  <p class="sub">Cuatro tipos de actividad: unir, leer un bloque, encontrar el error y completar. Respondé todo y tocá Verificar: te marca cuáles están bien y, en los que no, te da una pista sobre qué falla.</p>
+
+  <div id="ejercicios"></div>
+
+  <section>
+    <div class="fila">
+      <button class="accion" id="verificar">Verificar</button>
+      <button class="accion sec" id="reiniciar">Empezar de nuevo</button>
+      <span class="msj" id="msj"></span>
+    </div>
+  </section>
+  <p><a href="bootcamp.html" style="color:#1d4e89;text-decoration:none">← Volver al Code boot camp</a></p>
+</main>
+
+<script>
+const ID = "bootcamp_n2";
+const EJ = [{"tipo": "emparejar", "tema": "Qué distribución", "enunciado": "Unir cada situación con la línea de código que la sortea. Un bloque sobra.", "ctx": "rng = np.random.default_rng(7)\nN = 1000", "bloques": ["rng.exponential(0.8, size=N)", "rng.binomial(55, 0.7, size=N)", "rng.uniform(0.90, 1.00, size=N)", "rng.triangular(2, 4, 9, size=N)", "rng.normal(0.95, 0.4, size=N)"], "frases": [{"txt": "La duración de una tarea de la que un experto da tres números: mínimo 2, más probable 4 y máximo 9.", "ok": 3, "pista": "Mínimo, más probable y máximo son los tres parámetros de una sola distribución."}, {"txt": "Una tasa de retención de la que sólo se sabe que está entre 0,90 y 1,00.", "ok": 2, "pista": "Sólo se conoce el rango: es la distribución que reparte parejo entre dos extremos."}, {"txt": "El tiempo hasta la próxima llegada, que en promedio es de 0,8 horas.", "ok": 0, "pista": "Es un tiempo hasta el próximo evento, con muchos valores cortos y una cola larga, y se da por su media."}, {"txt": "Cuántas de 55 ofertas se aceptan, si cada una se acepta con probabilidad 0,7.", "ok": 1, "pista": "Cuenta aciertos en n intentos independientes que salen bien con la misma probabilidad."}]}, {"tipo": "predecir", "tema": "Leer np.where", "enunciado": "¿Qué imprime este bloque?", "ctx": "", "codigo": "rival = np.array([480, 530, 600])\nprint(len(np.where(rival > 520)))", "opciones": [{"txt": "2", "ok": false, "pista": "Son dos las posiciones que cumplen, pero len no cuenta posiciones: np.where(condicion) devuelve una tupla con un vector adentro, y len de la tupla es 1."}, {"txt": "1", "ok": true, "pista": ""}, {"txt": "3", "ok": false, "pista": "El arreglo tiene tres elementos, pero la condición sólo la cumplen dos, y de todos modos len no mide eso."}, {"txt": "[1 2]", "ok": false, "pista": "Esas son las posiciones que cumplen, y eso lo da np.where(rival > 520)[0]. Acá hay un len de por medio, que da un número."}]}, {"tipo": "emparejar", "tema": "Resumir sorteos", "enunciado": "Unir cada pedido con el bloque que lo calcula. Un bloque sobra.", "ctx": "rng = np.random.default_rng(7)\nN = 1000\ningresos = rng.normal(100, 10, size=(N, 12))\nz = rng.normal(100, 15, size=N)", "bloques": ["ingresos.sum(axis=1)", "ingresos.mean(axis=0)", "np.cumsum(z) / np.arange(1, N + 1)", "np.percentile(z, [10, 90])", "np.cumsum(z) / N"], "frases": [{"txt": "El promedio de las primeras n réplicas, para cada n.", "ok": 2, "pista": "Se suman las primeras n con una suma acumulada y se divide cada una por su propio n, que va de 1 a N."}, {"txt": "El total del año de cada réplica (una fila por réplica, una columna por mes).", "ok": 0, "pista": "Queda un número por réplica: desaparecen las columnas, que son el eje 1."}, {"txt": "El rango que contiene al 80% central de las réplicas.", "ok": 3, "pista": "Se da con dos percentiles, sin suponer ninguna distribución: el que deja 10% por debajo y el que deja 10% por encima."}, {"txt": "El promedio de cada mes sobre todas las réplicas.", "ok": 1, "pista": "Queda un número por mes: desaparecen las filas, que son el eje 0."}]}, {"tipo": "predecir", "tema": "El promedio acumulado", "enunciado": "¿Qué imprime este bloque?", "ctx": "", "codigo": "z = np.array([10, 20, 60, 30])\nprint(np.cumsum(z) / np.arange(1, 5))", "opciones": [{"txt": "[ 10  30  90 120]", "ok": false, "pista": "Esa es sólo la suma acumulada. Falta dividir cada suma por la cantidad de réplicas que lleva."}, {"txt": "[ 2.5  7.5 22.5 30. ]", "ok": false, "pista": "Eso es dividir todas las sumas por 4, el total. Cada suma se divide por su propio n: 1, 2, 3, 4."}, {"txt": "[10. 15. 30. 30.]", "ok": true, "pista": ""}, {"txt": "[10.   10.   20.    7.5]", "ok": false, "pista": "Eso es dividir cada dato por su n, sin acumular antes. Primero se suma hasta cada posición y después se divide."}]}, {"tipo": "error", "tema": "Una réplica, tres meses", "enunciado": "Se quiere un ruido por réplica que escala los tres meses de la demanda, para tener una matriz de 1.000 por 3. Toca la línea que tiene el error y elegí por qué.", "ctx": "", "codigo": "rng = np.random.default_rng(7)\nN = 1000\nhistorico = np.array([70, 110, 65])\nruido = rng.normal(0, 0.05, size=N)\ndemanda = historico * (1 + ruido)\nprint(demanda.shape)", "lineas_ok": [3], "pista_linea": "Esa línea está bien escrita. Mirá cómo se arma el ruido que después multiplica a los tres meses.", "pistas_linea": {"4": "Ahí es donde salta el error, pero la multiplicación está bien planteada: el problema está en la forma del ruido que le llega."}, "explicaciones": [{"txt": "size=N da un vector de 1.000 números, que no se puede multiplicar por un vector de 3 meses. Para extender un sorteo por réplica a los meses hace falta una columna, size=(N, 1).", "ok": true, "pista": ""}, {"txt": "rng.normal no acepta size cuando se quiere un sorteo por réplica.", "ok": false, "pista": "Sí lo acepta: size puede ser un entero o una forma. Lo que cambia es la forma que se pide."}, {"txt": "historico tendría que ser una matriz de 1.000 filas para poder multiplicarse.", "ok": false, "pista": "No hace falta: numpy extiende el vector de 3 meses a todas las filas. Lo que impide el producto es la forma del ruido."}]}, {"tipo": "completar", "tema": "Un estado que se arrastra", "enunciado": "El estado inicial va en la primera columna, y cada vuelta calcula una columna a partir de la anterior. Completá los dos huecos.", "ctx": "rng = np.random.default_rng(7)\nN = 3\nretencion = rng.uniform(0.9, 1.0, size=(N, 4))", "codigo": "dotacion = np.zeros((N, 4))\ndotacion[{{0}}, 0] = 63\nfor i in range(1, 4):\n    dotacion[:, i] = dotacion[:, {{1}}] * retencion[:, i - 1]", "huecos": [{"opciones": [":", "0", "N", "i"], "ok": 0, "pista": "El estado inicial es el mismo para las N réplicas, y las réplicas son las filas: va en todas las filas de la columna 0, que se pide con los dos puntos. Con un número se escribiría en una sola réplica."}, {"opciones": ["i - 1", "i", "i + 1", "0"], "ok": 0, "pista": "El valor de la columna i sale de la columna anterior, i - 1. Con i se multiplica una columna que todavía es cero, con i + 1 se pasa del tamaño de la matriz, y con 0 se vuelve siempre al estado inicial."}]}, {"tipo": "predecir", "tema": "Quién termina", "enunciado": "¿Qué imprime este bloque?", "ctx": "", "codigo": "fines = np.full(3, np.inf)\nfines[0] = 2.5\nfines[2] = 1.7\nprint(fines.argmin())", "opciones": [{"txt": "1.7", "ok": false, "pista": "Ese es el valor del próximo fin, que da fines.min(). argmin devuelve la posición."}, {"txt": "0", "ok": false, "pista": "El servidor 0 termina a las 2.5, pero hay otro que termina antes."}, {"txt": "1", "ok": false, "pista": "El servidor 1 está libre (infinito): es el que menos puede terminar."}, {"txt": "2", "ok": true, "pista": ""}]}, {"tipo": "predecir", "tema": "Traducir un bloque", "enunciado": "¿Qué calcula este bloque?", "ctx": "t = np.array([0.0, 0.5, 1.2, 1.4, 2.1])\nn = np.array([0, 1, 2, 1, 0])\nT = 3.0", "codigo": "duracion = np.diff(np.append(t, T))\nprint(np.sum(n * duracion) / T)", "opciones": [{"txt": "El promedio de n por evento, igual que n.mean().", "ok": false, "pista": "n.mean() da 0,8 y este bloque da 0,6: acá cada estado pesa lo que dura, no cuenta una vez por evento."}, {"txt": "La fracción del tiempo en que hay alguien en el sistema.", "ok": false, "pista": "Eso sería np.sum((n > 0) * duracion) / T. Acá n entra con su valor, no como verdadero o falso: un estado con 2 pesa el doble."}, {"txt": "El promedio de n en el tiempo: cada estado pesa lo que dura.", "ok": true, "pista": ""}, {"txt": "El total de campañas que pasaron por el sistema.", "ok": false, "pista": "El bloque no cuenta llegadas: pondera el estado por su duración y divide por el tiempo total."}]}, {"tipo": "error", "tema": "El área, en orden", "enunciado": "Se acumula el área bajo el estado para promediar en el tiempo: tendría que dar 0,6. Toca la línea que tiene el error y elegí por qué.", "ctx": "", "codigo": "t = np.array([0.0, 0.5, 1.2, 1.4, 2.1])\nn = np.array([0, 1, 2, 1, 0])\nT = 3.0\narea = 0.0\nreloj = 0.0\nfor t_nuevo, estado in zip(t[1:], n[:-1]):\n    reloj = t_nuevo\n    area = area + estado * (t_nuevo - reloj)\narea = area + n[-1] * (T - reloj)\nprint(area / T)", "lineas_ok": [6, 7], "pista_linea": "Esa línea está bien. El error está en cómo se combinan las dos que hay adentro del for.", "pistas_linea": {}, "explicaciones": [{"txt": "El reloj se mueve antes de sumar el tramo: t_nuevo - reloj da siempre 0 y el área queda en 0. Primero se suma el área, después se mueve el reloj.", "ok": true, "pista": ""}, {"txt": "zip(t[1:], n[:-1]) empareja mal los instantes con los estados.", "ok": false, "pista": "Los empareja bien: cada estado con el instante en que termina."}, {"txt": "El último tramo debería usar n[0] en vez de n[-1].", "ok": false, "pista": "El último tramo, hasta T, tiene el último estado: n[-1]."}, {"txt": "Falta dividir por la cantidad de eventos.", "ok": false, "pista": "El promedio en el tiempo se divide por el tiempo total T, no por la cantidad de eventos."}]}, {"tipo": "completar", "tema": "Dos gráficos", "enunciado": "Un histograma con una referencia vertical en 130 y barras apiladas. Completá los dos huecos.", "ctx": "rng = np.random.default_rng(7)\nz = rng.normal(100, 20, size=5000)\nconfig = ['1 + 1', '2 + 1', '2 + 2']\nespera = np.array([4.3, 2.6, 0.2])\ntrabajo = np.array([1.5, 1.5, 1.5])", "codigo": "fig, (a, b) = plt.subplots(1, 2)\na.hist(z, bins=40)\na.{{0}}(130, color=\"black\", ls=\"--\")\nb.bar(config, espera)\nb.bar(config, trabajo, {{1}}=espera)", "huecos": [{"opciones": ["axvline", "axhline", "vline", "plot"], "ok": 0, "pista": "La referencia va sobre el eje horizontal, donde están los valores de z, así que la línea es vertical. axhline la dibujaría horizontal."}, {"opciones": ["bottom", "top", "width", "height"], "ok": 0, "pista": "La segunda barra tiene que arrancar donde termina la primera: el parámetro es el piso desde el que se dibuja, que en inglés es bottom."}]}];
+const ROT = {emparejar: "Unir", predecir: "Leer", error: "Encontrar el error", completar: "Completar"};
+const LETRAS = "ABCDEFG";
+
+// respuesta de cada ejercicio: emparejar y completar, un arreglo; predecir, un indice; error, {linea, expl}
+let estado = {resp: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g && g.resp) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+function respuesta(i) {
+  const e = EJ[i];
+  if (estado.resp[i] === undefined) {
+    estado.resp[i] = e.tipo === "emparejar" ? e.frases.map(() => null)
+      : e.tipo === "completar" ? e.huecos.map(() => null)
+      : e.tipo === "error" ? {linea: null, expl: null} : null;
+  }
+  return estado.resp[i];
+}
+const el = (tag, cls, txt) => { const x = document.createElement(tag); if (cls) x.className = cls; if (txt !== undefined) x.textContent = txt; return x; };
+function cambio(i) { estado.verificado = false; guardar(); limpiar(i); document.getElementById("msj").textContent = ""; }
+
+const cont = document.getElementById("ejercicios");
+const tarj = [];
+
+EJ.forEach((e, i) => {
+  const s = el("section");
+  const h = el("h2");
+  h.appendChild(el("span", "num", i + 1));
+  h.appendChild(el("span", "", "Ejercicio " + (i + 1)));
+  h.appendChild(el("span", "tema", "· " + e.tema));
+  h.appendChild(el("span", "tipo", ROT[e.tipo]));
+  s.appendChild(h);
+  s.appendChild(el("p", "frase", e.enunciado));
+  if (e.ctx) {
+    const c = el("div", "ctx");
+    c.appendChild(el("p", "ctx-t", "Ya está definido:"));
+    c.appendChild(el("pre", "", e.ctx));
+    s.appendChild(c);
+  }
+  const t = {s, marcas: [], pistas: []};
+  const r = respuesta(i);
+
+  if (e.tipo === "emparejar") {
+    const bl = el("div", "codigo");
+    e.bloques.forEach((b, j) => {
+      const f = el("div", "bloque");
+      f.appendChild(el("span", "letra", LETRAS[j]));
+      f.appendChild(el("pre", "", b));
+      bl.appendChild(f);
+    });
+    s.appendChild(bl);
+    e.frases.forEach((f, k) => {
+      const p = el("div", "par");
+      p.appendChild(el("div", "t", f.txt));
+      const sel = el("select");
+      sel.appendChild(new Option("elegí", ""));
+      e.bloques.forEach((b, j) => sel.appendChild(new Option(LETRAS[j], j)));
+      sel.value = r[k] === null ? "" : r[k];
+      sel.addEventListener("change", () => { r[k] = sel.value === "" ? null : +sel.value; cambio(i); });
+      p.appendChild(sel);
+      s.appendChild(p);
+      const pi = el("div", "pista"); pi.hidden = true; s.appendChild(pi);
+      t.marcas.push(p); t.pistas.push(pi);
+    });
+  }
+
+  if (e.tipo === "predecir") {
+    const c = el("div", "codigo");
+    c.appendChild(el("pre", "", e.codigo));
+    s.appendChild(c);
+    const ops = el("div", "opciones");
+    e.opciones.forEach((o, j) => {
+      const l = el("label", "op");
+      const inp = el("input"); inp.type = "radio"; inp.name = "ej" + i; inp.checked = r === j;
+      inp.addEventListener("change", () => { estado.resp[i] = j; cambio(i); marcarElegidas(i); });
+      l.appendChild(inp);
+      l.appendChild(el("pre", "", o.txt));
+      ops.appendChild(l);
+      t.marcas.push(l);
+    });
+    s.appendChild(ops);
+    const pi = el("div", "pista"); pi.hidden = true; s.appendChild(pi); t.pistas.push(pi);
+  }
+
+  if (e.tipo === "error") {
+    s.appendChild(el("p", "paso", "1. Tocá la línea que tiene el error."));
+    const c = el("div", "codigo cod");
+    e.codigo.split("\n").forEach((ln, j) => {
+      const d = el("span", "linea", ln === "" ? " " : ln);
+      d.addEventListener("click", () => { r.linea = j; cambio(i); marcarElegidas(i); });
+      c.appendChild(d);
+      t.marcas.push(d);
+    });
+    s.appendChild(c);
+    s.appendChild(el("p", "paso", "2. ¿Por qué es un error?"));
+    const ops = el("div", "opciones");
+    e.explicaciones.forEach((o, j) => {
+      const l = el("label", "op");
+      const inp = el("input"); inp.type = "radio"; inp.name = "ej" + i; inp.checked = r.expl === j;
+      inp.addEventListener("change", () => { r.expl = j; cambio(i); marcarElegidas(i); });
+      l.appendChild(inp);
+      l.appendChild(el("span", "txt", o.txt));
+      ops.appendChild(l);
+      t.pistas.push(l);
+    });
+    s.appendChild(ops);
+    t.ops = ops;
+    const p1 = el("div", "pista"); p1.hidden = true; s.appendChild(p1); t.pista1 = p1;
+    const p2 = el("div", "pista"); p2.hidden = true; s.appendChild(p2); t.pista2 = p2;
+  }
+
+  if (e.tipo === "completar") {
+    const c = el("div", "codigo cod hueco");
+    const partes = e.codigo.split(/\{\{(\d+)\}\}/);
+    partes.forEach((p, k) => {
+      if (k % 2 === 0) { c.appendChild(document.createTextNode(p)); return; }
+      const h = +p, sel = el("select");
+      sel.appendChild(new Option("…", ""));
+      e.huecos[h].opciones.forEach((o, j) => sel.appendChild(new Option(o, j)));
+      sel.value = r[h] === null ? "" : r[h];
+      sel.addEventListener("change", () => { r[h] = sel.value === "" ? null : +sel.value; cambio(i); });
+      c.appendChild(sel);
+      t.marcas[h] = sel;
+    });
+    s.appendChild(c);
+    e.huecos.forEach(() => { const pi = el("div", "pista"); pi.hidden = true; s.appendChild(pi); t.pistas.push(pi); });
+  }
+  cont.appendChild(s);
+  tarj.push(t);
+});
+
+function marcarElegidas(i) {
+  const e = EJ[i], t = tarj[i], r = respuesta(i);
+  if (e.tipo === "predecir") t.marcas.forEach((l, j) => l.classList.toggle("elegida", r === j));
+  if (e.tipo === "error") {
+    t.marcas.forEach((d, j) => d.classList.toggle("elegida", r.linea === j));
+    t.pistas.forEach((l, j) => l.classList.toggle("elegida", r.expl === j));
+  }
+}
+function limpiar(i) {
+  const t = tarj[i];
+  t.s.classList.remove("bien", "mal");
+  t.marcas.forEach(m => m && m.classList.remove("bien", "mal"));
+  if (EJ[i].tipo === "error") t.pistas.forEach(l => l.classList.remove("bien", "mal"));
+  [t.pista1, t.pista2].forEach(p => { if (p) p.hidden = true; });
+  if (EJ[i].tipo !== "error") t.pistas.forEach(p => p.hidden = true);
+}
+const mostrar = (p, txt) => { p.textContent = "Pista: " + txt; p.hidden = false; };
+
+// devuelve "ok", "mal" o "falta" para el ejercicio, y pinta
+function evaluar(i) {
+  const e = EJ[i], t = tarj[i], r = respuesta(i);
+  limpiar(i);
+  let mal = 0, falta = 0;
+  if (e.tipo === "emparejar") {
+    e.frases.forEach((f, k) => {
+      if (r[k] === null) { falta++; return; }
+      if (r[k] === f.ok) t.marcas[k].classList.add("bien");
+      else { mal++; t.marcas[k].classList.add("mal"); mostrar(t.pistas[k], f.pista); }
+    });
+  }
+  if (e.tipo === "predecir") {
+    if (r === null) falta++;
+    else if (e.opciones[r].ok) t.marcas[r].classList.add("bien");
+    else { mal++; t.marcas[r].classList.add("mal"); mostrar(t.pistas[0], e.opciones[r].pista); }
+  }
+  if (e.tipo === "error") {
+    if (r.linea === null || r.expl === null) falta++;
+    if (r.linea !== null) {
+      if (e.lineas_ok.includes(r.linea)) t.marcas[r.linea].classList.add("bien");
+      else { mal++; t.marcas[r.linea].classList.add("mal"); mostrar(t.pista1, e.pistas_linea[String(r.linea)] || e.pista_linea); }
+    }
+    if (r.expl !== null) {
+      t.marcas.forEach(d => d.classList.remove("elegida"));
+      if (e.explicaciones[r.expl].ok) t.pistas[r.expl].classList.add("bien");
+      else { mal++; t.pistas[r.expl].classList.add("mal"); mostrar(t.pista2, e.explicaciones[r.expl].pista); }
+    }
+    t.pistas.forEach(l => l.classList.remove("elegida"));
+  }
+  if (e.tipo === "completar") {
+    e.huecos.forEach((h, k) => {
+      if (r[k] === null) { falta++; return; }
+      if (r[k] === h.ok) t.marcas[k].classList.add("bien");
+      else { mal++; t.marcas[k].classList.add("mal"); mostrar(t.pistas[k], h.pista); }
+    });
+  }
+  if (mal) t.s.classList.add("mal");
+  else if (!falta) t.s.classList.add("bien");
+  return mal ? "mal" : falta ? "falta" : "ok";
+}
+function verificar() {
+  const res = EJ.map((e, i) => evaluar(i));
+  const bien = res.filter(x => x === "ok").length, mal = res.filter(x => x === "mal").length, falta = res.filter(x => x === "falta").length;
+  estado.verificado = true; guardar();
+  const m = document.getElementById("msj");
+  m.className = "msj " + (bien === EJ.length ? "ok" : "mal");
+  m.textContent = bien === EJ.length ? "Los " + EJ.length + " ejercicios están bien." :
+    bien + " bien, " + mal + " en rojo" + (falta ? ", " + falta + " sin terminar" : "") + ". Leé las pistas, corregí y volvé a verificar.";
+}
+document.getElementById("verificar").addEventListener("click", verificar);
+document.getElementById("reiniciar").addEventListener("click", () => {
+  estado = {resp: {}, verificado: false}; guardar();
+  location.reload();
+});
+EJ.forEach((e, i) => marcarElegidas(i));
+if (estado.verificado) verificar();
+</script>
+</body>
+</html>
