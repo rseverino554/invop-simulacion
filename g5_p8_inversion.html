@@ -106,20 +106,20 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 
   <section>
     <h2><span class="num">2</span>El diagrama de flujo</h2>
-    <p class="sub" style="margin-bottom:6px">Faltan el sorteo de los flujos y las dos cuentas del VAN. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <p class="sub" style="margin-bottom:6px">Faltan el inicio, el sorteo de los flujos, las dos cuentas del VAN, la pregunta del bucle, el resumen y el cruce. Lo que se guarda ya está. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 560 700" role="img" aria-label="Diagrama de flujo del hotel y el centro comercial">
       <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
       <!-- cajas fijas -->
-      <rect class="caja" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42">Fijar la semilla y N = 10.000</text>
       <rect class="caja" x="90" y="340" width="340" height="44"/><text class="txt" x="260" y="362">Guardar los dos VAN del 100%</text>
-      <polygon class="caja" points="260,416 360,456 260,496 160,456"/><text class="txt" x="260" y="456">¿Faltan réplicas?</text>
-      <rect class="caja" x="90" y="540" width="340" height="44"/><text class="txt" x="260" y="562">Resumen: media, P(VAN &lt; 0), histograma</text>
-      <rect class="caja" x="90" y="620" width="340" height="44" rx="22"/><text class="txt" x="260" y="642">Cruce: VAN con los flujos medios</text>
       <!-- huecos -->
+      <g class="slot" data-slot="i"><rect class="hueco" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42"></text></g>
       <g class="slot" data-slot="f"><rect class="hueco" x="90" y="100" width="340" height="44"/><text class="txt" x="260" y="122"></text></g>
       <g class="slot" data-slot="v"><rect class="hueco" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202"></text></g>
       <g class="slot" data-slot="d"><rect class="hueco" x="90" y="260" width="340" height="44"/><text class="txt" x="260" y="282"></text></g>
+      <g class="slot" data-slot="q"><polygon class="hueco" points="260,416 360,456 260,496 160,456"/><text class="txt" x="260" y="456"></text></g>
+      <g class="slot" data-slot="m"><rect class="hueco" x="90" y="540" width="340" height="44"/><text class="txt" x="260" y="562"></text></g>
+      <g class="slot" data-slot="k"><rect class="hueco" x="90" y="620" width="340" height="44" rx="22"/><text class="txt" x="260" y="642"></text></g>
       <!-- flechas -->
       <path class="flecha" d="M260 64V100"/>
       <path class="flecha" d="M260 144V180"/>
@@ -150,8 +150,8 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 <script>
 const ID = "g5p8";
 const TITULO = "Guía 5 · Problema 8 · El hotel y el centro comercial";
-const SLOTS = ["f", "v", "d"];
-const PISTAS = {"f": "Los años 1 a 6 son normales y el año 7 es uniforme. El año 0 es cierto: no se sortea.", "v": "Un peso de más adelante vale menos hoy: cada flujo se divide por 1,1 elevado al año en que ocurre.", "d": "La desarrolladora recibe sólo su fracción de cada proyecto: cada VAN se multiplica por su participación antes de sumar."};
+const SLOTS = ["i", "f", "v", "d", "q", "m", "k"];
+const PISTAS = {"i": "Antes de la primera réplica hay que fijar lo que hace repetible la corrida y cuántas réplicas se hacen.", "f": "Los años 1 a 6 son normales y el año 7 es uniforme. El año 0 es cierto: no se sortea.", "v": "Un peso de más adelante vale menos hoy: cada flujo se divide por 1,1 elevado al año en que ocurre.", "d": "La desarrolladora recibe sólo su fracción de cada proyecto: cada VAN se multiplica por su participación antes de sumar.", "q": "Cada réplica son los siete años de los dos proyectos y ya se guardó. ¿Qué se pregunta para saber si hay otra por hacer?", "m": "Hay que mostrar el VAN medio, el riesgo de perder plata y la forma de la distribución.", "k": "Un control simple: calcular el VAN una sola vez con los flujos medios (la media de cada normal, el punto medio de la uniforme) y ver que el promedio simulado cae cerca."};
 const CASILLEROS = [
   ["decide", "Qué se decide", "la decisión del negocio y el número con el que se la juzga", "Qué participación tomar en el hotel y en el centro comercial. Se juzga por el VAN medio, la probabilidad de perder plata y la de perder más de 1.000 millones."],
   ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Los flujos de los años 1 a 6 de cada proyecto: normales, con la media y el desvío de la tabla. El precio de venta del año 7: uniforme entre dos valores. El año 0 es cierto."],
@@ -163,21 +163,24 @@ const CASILLEROS = [
   ["experimento", "Experimento", "qué se repite por fuera de la réplica: barrido con la misma semilla, escenarios", "Tres alternativas sobre las mismas réplicas (la propuesta, sólo el hotel, sólo el centro) y el barrido de la participación en el hotel de 0 a 30%. La probabilidad de perder es mínima con 11%."]
 ];
 const FICHAS = [
+  ["i", "Fijar la semilla y N = 10.000"],
   ["f", "Sortear los flujos: normales y uniforme"],
   ["v", "VAN de cada proyecto = F0 + Σ Fn / 1,1^n"],
   ["d", "VAN = xH · VAN hotel + xC · VAN centro"],
+  ["q", "¿Faltan réplicas?"],
+  ["m", "Resumen: media, P(VAN < 0), histograma"],
+  ["k", "Cruce: VAN con los flujos medios"],
   ["x1", "Sortear sólo el flujo medio de cada año"],
   ["x2", "VAN de cada proyecto = F0 + Σ Fn"],
-  ["x3", "VAN = VAN hotel + VAN centro"],
-  ["x4", "Sortear el año 7 como normal"],
-  ["x5", "VAN de cada proyecto = Σ Fn / 1,1"]
+  ["x3", "Cruce: el VAN con el año 7 en su máximo"]
 ];
-const ORDEN = ["x3", "v", "x1", "d", "x5", "f", "x2", "x4"];
+const ORDEN = ["k", "x2", "i", "d", "x1", "q", "v", "x3", "m", "f"];
 
 let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
 try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
 const texto = k => FICHAS.find(f => f[0] === k)[1];
+estado.slots = Object.fromEntries(Object.entries(estado.slots || {}).filter(([sl, k]) => SLOTS.includes(sl) && FICHAS.some(f => f[0] === k)));
 
 // identificación
 for (const k of ["nombre", "legajo"]) {
@@ -237,6 +240,11 @@ function pintarSlots(marcar) {
     const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
     const k = estado.slots[s];
     t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
     h.classList.toggle("lleno", !!k);
     h.classList.toggle("bien", !!marcar && k === s);
     h.classList.toggle("malo", !!marcar && !!k && k !== s);
@@ -261,7 +269,7 @@ document.getElementById("verificar").addEventListener("click", () => {
   guardar();
   m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
   m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
-    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué se sortea y qué no, cómo se traen los flujos futuros al año 0 y qué parte de cada proyecto recibe la desarrolladora, y probá de nuevo.";
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué se fija al empezar, qué se sortea y qué no, cómo se traen los flujos futuros al año 0, qué parte de cada proyecto se recibe y cómo se cierra la corrida, y probá de nuevo.";
 });
 
 // pistas: una por hueco equivocado, con el número del hueco

@@ -101,24 +101,24 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 
   <section>
     <h2><span class="num">2</span>El diagrama de flujo</h2>
-    <p class="sub" style="margin-bottom:6px">Faltan las dos cuentas del año y la cuenta final de la década. Hay dos bucles: el de los años y el de las réplicas. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <p class="sub" style="margin-bottom:6px">Falta todo el diagrama menos el inicio. Hay dos bucles: el de los años y el de las réplicas. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 560 1060" role="img" aria-label="Diagrama de flujo de la caja de las residencias">
       <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
       <!-- cajas fijas -->
       <rect class="caja" x="90" y="20" width="340" height="44" rx="22"/><text class="txt" x="260" y="42">Fijar la semilla, N = 10.000 y L</text>
-      <rect class="caja" x="90" y="100" width="340" height="44"/><text class="txt" x="260" y="122">Empezar la década: saldo = 100, corto = 0</text>
-      <rect class="caja" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202">Sortear el flujo del año (triangular)</text>
-      <rect class="caja" x="150" y="420" width="220" height="44"/><text class="txt" x="260" y="442">saldo = antes + corto</text>
-      <polygon class="caja" points="260,496 360,536 260,576 160,536"/><text class="txt" x="260" y="536">¿Faltan años?</text>
-      <rect class="caja" x="150" y="700" width="220" height="44"/><text class="txt" x="260" y="722">Guardar el saldo final</text>
-      <polygon class="caja" points="260,776 360,816 260,856 160,816"/><text class="txt" x="260" y="816">¿Faltan réplicas?</text>
-      <rect class="caja" x="90" y="900" width="340" height="44"/><text class="txt" x="260" y="922">Resumen: media y P(saldo final &lt; 0)</text>
-      <rect class="caja" x="90" y="980" width="340" height="44" rx="22"/><text class="txt" x="260" y="1002">Cruce: década con los flujos más probables</text>
       <!-- huecos -->
+      <g class="slot" data-slot="e"><rect class="hueco" x="90" y="100" width="340" height="44"/><text class="txt" x="260" y="122"></text></g>
+      <g class="slot" data-slot="f"><rect class="hueco" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202"></text></g>
       <g class="slot" data-slot="a"><rect class="hueco" x="90" y="260" width="340" height="44"/><text class="txt" x="260" y="282"></text></g>
       <g class="slot" data-slot="b"><rect class="hueco" x="90" y="340" width="340" height="44"/><text class="txt" x="260" y="362"></text></g>
+      <g class="slot" data-slot="s"><rect class="hueco" x="150" y="420" width="220" height="44"/><text class="txt" x="260" y="442"></text></g>
+      <g class="slot" data-slot="y"><polygon class="hueco" points="260,496 360,536 260,576 160,536"/><text class="txt" x="260" y="536"></text></g>
       <g class="slot" data-slot="c"><rect class="hueco" x="90" y="620" width="340" height="44"/><text class="txt" x="260" y="642"></text></g>
+      <g class="slot" data-slot="g"><rect class="hueco" x="150" y="700" width="220" height="44"/><text class="txt" x="260" y="722"></text></g>
+      <g class="slot" data-slot="q"><polygon class="hueco" points="260,776 360,816 260,856 160,816"/><text class="txt" x="260" y="816"></text></g>
+      <g class="slot" data-slot="m"><rect class="hueco" x="90" y="900" width="340" height="44"/><text class="txt" x="260" y="922"></text></g>
+      <g class="slot" data-slot="k"><rect class="hueco" x="90" y="980" width="340" height="44" rx="22"/><text class="txt" x="260" y="1002"></text></g>
       <!-- flechas -->
       <path class="flecha" d="M260 64V100"/>
       <path class="flecha" d="M260 144V180"/>
@@ -154,8 +154,8 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 <script>
 const ID = "g5p9";
 const TITULO = "Guía 5 · Problema 9 · La caja de las residencias";
-const SLOTS = ["a", "b", "c"];
-const PISTAS = {"a": "Al comienzo de cada año hay que pagar lo que vence: el interés del préstamo largo y el corto del año anterior con su interés.", "b": "El préstamo corto se toma sólo si el saldo queda por debajo de 50, y por lo que falta. Nunca es negativo.", "c": "Al comienzo de 2037 se pagan el último interés del largo, el largo entero y el último corto. El resultado es lo que queda después de pagar todo."};
+const SLOTS = ["e", "f", "a", "b", "s", "y", "c", "g", "q", "m", "k"];
+const PISTAS = {"e": "La década arranca con el saldo inicial del enunciado y sin ningún préstamo corto pendiente.", "f": "Cada año tiene su propia triangular, con mínimo, más probable y máximo. Hay que sortear el flujo del año que toca.", "a": "Al comienzo de cada año hay que pagar lo que vence: el interés del préstamo largo y el corto del año anterior con su interés.", "b": "El préstamo corto se toma sólo si el saldo queda por debajo de 50, y por lo que falta. Nunca es negativo.", "s": "El saldo con el que sigue el año incluye el préstamo corto que se acaba de tomar, si es que se tomó.", "y": "Al terminar las cuentas de un año, ¿qué pregunta decide si se pasa al año siguiente o se cierra la década?", "c": "Al comienzo de 2037 se pagan el último interés del largo, el largo entero y el último corto. El resultado es lo que queda después de pagar todo.", "g": "Cada década tiene que dejarle un número al resumen: el que se mide al comienzo de 2037.", "q": "Cuando se cierra una década y se guarda su resultado, ¿qué se pregunta para saber si hay otra década por simular?", "m": "Hay que resumir el saldo final de las décadas simuladas: su promedio y qué tan seguido queda en rojo.", "k": "Un control exacto es simular una década con un solo valor por año, el más probable, y recorrerla a mano."};
 const CASILLEROS = [
   ["decide", "Qué se decide", "la decisión del negocio y el número con el que se la juzga", "Cuánto pedir de préstamo largo. Se juzga por el saldo final medio y por la probabilidad de terminar con saldo negativo."],
   ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "El flujo neto de cada año de 2027 a 2036: triangular, con el mínimo, el más probable y el máximo de la tabla. Se sortea uno por año."],
@@ -167,21 +167,30 @@ const CASILLEROS = [
   ["experimento", "Experimento", "qué se repite por fuera de la réplica: barrido con la misma semilla, escenarios", "El barrido del préstamo largo de 0 a 2.000 millones, con la misma semilla. El saldo medio es máximo con 350 millones y la probabilidad de saldo negativo es mínima con 750."]
 ];
 const FICHAS = [
+  ["e", "Empezar la década: saldo = 100, corto = 0"],
+  ["f", "Sortear el flujo del año (triangular)"],
   ["a", "antes = saldo + flujo − deudas que vencen"],
   ["b", "corto = máx(50 − antes, 0)"],
+  ["s", "saldo = antes + corto"],
+  ["y", "¿Faltan años?"],
   ["c", "saldo final = saldo − todas las deudas"],
+  ["g", "Guardar el saldo final"],
+  ["q", "¿Faltan réplicas?"],
+  ["m", "Resumen: media y P(saldo final < 0)"],
+  ["k", "Cruce: década con los flujos más probables"],
   ["x1", "antes = saldo + flujo"],
   ["x2", "corto = antes − 50"],
-  ["x3", "corto = máx(antes − 50, 0)"],
-  ["x4", "saldo final = saldo"],
-  ["x5", "corto = 50 en cada año"]
+  ["x3", "Empezar la década: saldo = 50, corto = 0"],
+  ["x4", "Sortear un único flujo para toda la década"],
+  ["x5", "saldo = antes"]
 ];
-const ORDEN = ["x3", "c", "x1", "b", "x4", "a", "x2", "x5"];
+const ORDEN = ["x4", "q", "b", "k", "x1", "e", "y", "x3", "c", "x5", "a", "m", "x2", "s", "g", "f"];
 
 let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
 try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
 const texto = k => FICHAS.find(f => f[0] === k)[1];
+estado.slots = Object.fromEntries(Object.entries(estado.slots || {}).filter(([sl, k]) => SLOTS.includes(sl) && FICHAS.some(f => f[0] === k)));
 
 // identificación
 for (const k of ["nombre", "legajo"]) {
@@ -241,6 +250,11 @@ function pintarSlots(marcar) {
     const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
     const k = estado.slots[s];
     t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
     h.classList.toggle("lleno", !!k);
     h.classList.toggle("bien", !!marcar && k === s);
     h.classList.toggle("malo", !!marcar && !!k && k !== s);
@@ -265,7 +279,7 @@ document.getElementById("verificar").addEventListener("click", () => {
   guardar();
   m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
   m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
-    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué hay que pagar al comienzo de cada año, cuándo se pide el préstamo corto y qué falta pagar al cerrar la década, y probá de nuevo.";
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá cómo arranca la década, qué se paga y qué se pide cada año, cómo se cierra cada bucle y qué se hace con el resultado, y probá de nuevo.";
 });
 
 // pistas: una por hueco equivocado, con el número del hueco

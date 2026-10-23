@@ -100,19 +100,19 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 
   <section>
     <h2><span class="num">2</span>El diagrama de flujo</h2>
-    <p class="sub" style="margin-bottom:6px">Faltan el sorteo de los empleados, la suma de la réplica y el resumen. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <p class="sub" style="margin-bottom:6px">Faltan el sorteo de los empleados, la suma de la réplica, lo que se guarda y el cruce con la esperanza exacta. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 560 620" role="img" aria-label="Diagrama de flujo de la prima de la cartera">
       <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
       <!-- cajas fijas -->
       <rect class="caja" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42">Fijar la semilla y N = 10.000</text>
-      <rect class="caja" x="150" y="260" width="220" height="44"/><text class="txt" x="260" y="282">Guardar el costo total</text>
       <polygon class="caja" points="260,336 360,376 260,416 160,376"/><text class="txt" x="260" y="376">¿Faltan réplicas?</text>
-      <rect class="caja" x="90" y="540" width="340" height="44" rx="22"/><text class="txt" x="260" y="562">Cruce: promedio contra 500 × 250.000</text>
+      <rect class="caja" x="90" y="460" width="340" height="44"/><text class="txt" x="260" y="482">Percentil 95 del costo total, dividido 500</text>
       <!-- huecos -->
       <g class="slot" data-slot="e"><rect class="hueco" x="90" y="100" width="340" height="44"/><text class="txt" x="260" y="122"></text></g>
       <g class="slot" data-slot="c"><rect class="hueco" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202"></text></g>
-      <g class="slot" data-slot="p"><rect class="hueco" x="90" y="460" width="340" height="44"/><text class="txt" x="260" y="482"></text></g>
+      <g class="slot" data-slot="g"><rect class="hueco" x="150" y="260" width="220" height="44"/><text class="txt" x="260" y="282"></text></g>
+      <g class="slot" data-slot="x"><rect class="hueco" x="90" y="540" width="340" height="44" rx="22"/><text class="txt" x="260" y="562"></text></g>
       <!-- flechas -->
       <path class="flecha" d="M260 64V100"/>
       <path class="flecha" d="M260 144V180"/>
@@ -142,8 +142,8 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 <script>
 const ID = "g5p4";
 const TITULO = "Guía 5 · Problema 4 · La prima de la cartera";
-const SLOTS = ["e", "c", "p"];
-const PISTAS = {"e": "Una réplica ahora es un año entero: hay que sortear a todos los empleados de la empresa, uno por uno, igual que en el problema 3.", "c": "La aseguradora paga los reclamos de todos los empleados juntos. El costo del año es la suma de los 500 costos.", "p": "Para cubrir el costo total en el 95% de los años hace falta el percentil 95 del costo total, no el de un solo empleado, repartido entre los 500 empleados."};
+const SLOTS = ["e", "c", "g", "x"];
+const PISTAS = {"e": "Una réplica ahora es un año entero: hay que sortear a todos los empleados de la empresa, uno por uno, igual que en el problema 3.", "c": "La aseguradora paga los reclamos de todos los empleados juntos. El costo del año es la suma de los 500 costos.", "g": "La réplica es un año entero de la cartera. Lo que se guarda para el resumen es el resultado de ese año, no el de cada empleado.", "x": "Calculá la esperanza de un empleado con las proporciones de la tabla y el punto medio de cada rango. ¿Cuántos empleados tiene la cartera y qué número se compara?"};
 const CASILLEROS = [
   ["decide", "Qué se decide", "la decisión del negocio y el número con el que se la juzga",
    "Qué prima anual por empleado cobrar. Se juzga por la fracción de años en que el costo total supera lo cobrado y por la prima que cubre el 95% de los años."],
@@ -165,18 +165,18 @@ const CASILLEROS = [
 const FICHAS = [
   ["e", "Sortear a los 500 empleados como en el P3"],
   ["c", "Sumar los 500 costos: costo total del año"],
-  ["p", "Percentil 95 del costo total, dividido 500"],
+  ["g", "Guardar el costo total"],
+  ["x", "Cruce: promedio contra 500 × 250.000"],
   ["x1", "Sortear a un solo empleado"],
-  ["x2", "Promediar los 500 costos"],
-  ["x3", "Percentil 95 del costo de un empleado"],
-  ["x4", "Sortear el tipo una sola vez para los 500"]
+  ["x2", "Cruce: promedio contra 250.000"]
 ];
-const ORDEN = ["x2", "p", "x4", "e", "x3", "c", "x1"];
+const ORDEN = ["x2", "c", "x1", "x", "e", "g"];
 
 let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
 try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
 const texto = k => FICHAS.find(f => f[0] === k)[1];
+estado.slots = Object.fromEntries(Object.entries(estado.slots || {}).filter(([sl, k]) => SLOTS.includes(sl) && FICHAS.some(f => f[0] === k)));
 
 // identificación
 for (const k of ["nombre", "legajo"]) {
@@ -236,6 +236,11 @@ function pintarSlots(marcar) {
     const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
     const k = estado.slots[s];
     t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
     h.classList.toggle("lleno", !!k);
     h.classList.toggle("bien", !!marcar && k === s);
     h.classList.toggle("malo", !!marcar && !!k && k !== s);
@@ -260,7 +265,7 @@ document.getElementById("verificar").addEventListener("click", () => {
   guardar();
   m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
   m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
-    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué es una réplica en este problema, qué se hace con los 500 costos y qué número da la prima, y probá de nuevo.";
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué es una réplica en este problema, qué número deja cada año y con qué valor exacto se cruza el promedio, y probá de nuevo.";
 });
 
 // pistas: una por hueco equivocado, con el número del hueco

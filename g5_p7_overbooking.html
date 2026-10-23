@@ -106,23 +106,23 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 
   <section>
     <h2><span class="num">2</span>El diagrama de flujo</h2>
-    <p class="sub" style="margin-bottom:6px">Faltan las reservas que se aceptan, los presentados y las dos cuentas del avión. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <p class="sub" style="margin-bottom:6px">Faltan el inicio, el sorteo de los pedidos, las reservas, los presentados, la ganancia, lo que se guarda, la pregunta del bucle, el resumen y el cruce. Los ocupados y los rebotados ya están. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 560 940" role="img" aria-label="Diagrama de flujo del overbooking del vuelo a Córdoba">
       <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
       <!-- cajas fijas -->
-      <rect class="caja" x="90" y="20" width="340" height="44" rx="22"/><text class="txt" x="260" y="42">Fijar la semilla, N = 10.000 y el tope</text>
-      <rect class="caja" x="60" y="100" width="400" height="44"/><text class="txt" x="260" y="122">Sortear los pedidos: normal(195; 30), al entero</text>
-      <rect class="caja" x="30" y="500" width="500" height="44"/><text class="txt" x="280" y="522">ganancia = 30.000 · ocupados − 45.000 · rebotados − 3 M</text>
-      <rect class="caja" x="150" y="580" width="220" height="44"/><text class="txt" x="260" y="602">Guardar los tres números</text>
-      <polygon class="caja" points="260,656 360,696 260,736 160,696"/><text class="txt" x="260" y="696">¿Faltan réplicas?</text>
-      <rect class="caja" x="90" y="780" width="340" height="44"/><text class="txt" x="260" y="802">Resumen: medias y P(ganancia &gt; 0)</text>
-      <rect class="caja" x="90" y="860" width="340" height="44" rx="22"/><text class="txt" x="260" y="882">Cruce: la regla del 10% (tope 165)</text>
+      <rect class="caja" x="90" y="340" width="340" height="44"/><text class="txt" x="260" y="362">ocupados = mín(presentados, 150)</text>
+      <rect class="caja" x="90" y="420" width="340" height="44"/><text class="txt" x="260" y="442">rebotados = máx(presentados − 150, 0)</text>
       <!-- huecos -->
+      <g class="slot" data-slot="i"><rect class="hueco" x="90" y="20" width="340" height="44" rx="22"/><text class="txt" x="260" y="42"></text></g>
+      <g class="slot" data-slot="p"><rect class="hueco" x="60" y="100" width="400" height="44"/><text class="txt" x="260" y="122"></text></g>
       <g class="slot" data-slot="r"><rect class="hueco" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202"></text></g>
       <g class="slot" data-slot="b"><rect class="hueco" x="90" y="260" width="340" height="44"/><text class="txt" x="260" y="282"></text></g>
-      <g class="slot" data-slot="o"><rect class="hueco" x="90" y="340" width="340" height="44"/><text class="txt" x="260" y="362"></text></g>
-      <g class="slot" data-slot="w"><rect class="hueco" x="90" y="420" width="340" height="44"/><text class="txt" x="260" y="442"></text></g>
+      <g class="slot" data-slot="g"><rect class="hueco" x="30" y="500" width="500" height="44"/><text class="txt" x="280" y="522"></text></g>
+      <g class="slot" data-slot="a"><rect class="hueco" x="150" y="580" width="220" height="44"/><text class="txt" x="260" y="602"></text></g>
+      <g class="slot" data-slot="q"><polygon class="hueco" points="260,656 360,696 260,736 160,696"/><text class="txt" x="260" y="696"></text></g>
+      <g class="slot" data-slot="m"><rect class="hueco" x="90" y="780" width="340" height="44"/><text class="txt" x="260" y="802"></text></g>
+      <g class="slot" data-slot="k"><rect class="hueco" x="90" y="860" width="340" height="44" rx="22"/><text class="txt" x="260" y="882"></text></g>
       <!-- flechas -->
       <path class="flecha" d="M260 64V100"/>
       <path class="flecha" d="M260 144V180"/>
@@ -156,8 +156,8 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 <script>
 const ID = "g5p7";
 const TITULO = "Guía 5 · Problema 7 · El overbooking del vuelo a Córdoba";
-const SLOTS = ["r", "b", "o", "w"];
-const PISTAS = {"r": "No se aceptan todos los pedidos: se aceptan hasta el tope de reservas. Las reservas vendidas son el menor entre los pedidos y el tope.", "b": "Cada pasajero con reserva se presenta o no, con probabilidad 0,80 e independiente de los demás. Es una binomial, y sus intentos son las reservas vendidas de ese vuelo.", "o": "En el avión entran 150. Los ocupados son los presentados, pero nunca más que los asientos.", "w": "Rebota quien se presenta y no tiene asiento: los presentados que pasan los 150, y ninguno si no los pasan."};
+const SLOTS = ["i", "p", "r", "b", "g", "a", "q", "m", "k"];
+const PISTAS = {"i": "Antes de empezar hay que fijar lo que hace repetible la corrida, cuántas réplicas se hacen y el tope de reservas con el que se simula.", "p": "Los pedidos de reserva son aproximadamente normales, pero se cuentan en personas: hay que redondear al entero.", "r": "No se aceptan todos los pedidos: se aceptan hasta el tope de reservas. Las reservas vendidas son el menor entre los pedidos y el tope.", "b": "Cada pasajero con reserva se presenta o no, con probabilidad 0,80 e independiente de los demás. Es una binomial, y sus intentos son las reservas vendidas de ese vuelo.", "g": "Pensá qué ingresa por pasajero que viaja, cuánto cuesta cada pasajero que rebota (sumá sus tres costos) y qué se paga por vuelo, ocupe lo que ocupe.", "a": "Cada vuelo tiene que dejarle al resumen los números que después se promedian: los que salieron de las cuentas del avión.", "q": "Cada vuelo simulado termina en un guardado. ¿Qué se pregunta para saber si hay que simular otro vuelo?", "m": "La decisión mira promedios y la probabilidad de que el vuelo no pierda plata.", "k": "El 10% de la política habitual da un tope fácil de calcular con los 150 asientos. ¿Contra qué regla se cruza lo que sale de la simulación?"};
 const CASILLEROS = [
   ["decide", "Qué se decide", "la decisión del negocio y el número con el que se la juzga", "Cuántas reservas aceptar por vuelo (el tope). Se juzga por la ganancia media por vuelo y por los pasajeros rebotados."],
   ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "Los pedidos de reserva: normal de media 195 y desvío 30, redondeada al entero. Los presentados: binomial, con las reservas vendidas como intentos y probabilidad 0,80. Una variable alimenta a la otra."],
@@ -169,22 +169,27 @@ const CASILLEROS = [
   ["experimento", "Experimento", "qué se repite por fuera de la réplica: barrido con la misma semilla, escenarios", "El barrido del tope de 150 a 200, con la misma semilla, y repetirlo con el costo del rebote al doble y al cuádruple. El tope óptimo es 187 y baja a 182 y a 179."]
 ];
 const FICHAS = [
+  ["i", "Fijar la semilla, N = 10.000 y el tope"],
+  ["p", "Sortear los pedidos: normal(195; 30), al entero"],
   ["r", "reservas = mín(pedidos, tope)"],
   ["b", "presentados ~ binomial(reservas, 0,80)"],
-  ["o", "ocupados = mín(presentados, 150)"],
-  ["w", "rebotados = máx(presentados − 150, 0)"],
+  ["g", "ganancia = 30.000 · ocupados − 45.000 · rebotados − 3 M"],
+  ["a", "Guardar los tres números"],
+  ["q", "¿Faltan réplicas?"],
+  ["m", "Resumen: medias y P(ganancia > 0)"],
+  ["k", "Cruce: la regla del 10% (tope 165)"],
   ["x1", "reservas = pedidos"],
   ["x2", "presentados = 0,80 · reservas"],
-  ["x3", "ocupados = reservas"],
-  ["x4", "rebotados = presentados − 150"],
-  ["x5", "presentados ~ binomial(150, 0,80)"]
+  ["x3", "ganancia = 30.000 · presentados − 3 M"],
+  ["x4", "Cruce: el máximo de las ganancias"]
 ];
-const ORDEN = ["x4", "b", "x3", "w", "x1", "o", "x5", "r", "x2"];
+const ORDEN = ["x3", "k", "b", "x1", "q", "m", "i", "x4", "g", "a", "x2", "r", "p"];
 
 let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
 try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
 const texto = k => FICHAS.find(f => f[0] === k)[1];
+estado.slots = Object.fromEntries(Object.entries(estado.slots || {}).filter(([sl, k]) => SLOTS.includes(sl) && FICHAS.some(f => f[0] === k)));
 
 // identificación
 for (const k of ["nombre", "legajo"]) {
@@ -244,6 +249,11 @@ function pintarSlots(marcar) {
     const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
     const k = estado.slots[s];
     t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
     h.classList.toggle("lleno", !!k);
     h.classList.toggle("bien", !!marcar && k === s);
     h.classList.toggle("malo", !!marcar && !!k && k !== s);
@@ -268,7 +278,7 @@ document.getElementById("verificar").addEventListener("click", () => {
   guardar();
   m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
   m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
-    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá cuántas reservas se aceptan, cuántos de ellos se presentan y qué pasa cuando se presentan más de 150, y probá de nuevo.";
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá cómo se arma cada vuelo, de los pedidos a la ganancia, qué se guarda, qué se pregunta al cerrar cada vuelta, qué resume la corrida y con qué se cruza, y probá de nuevo.";
 });
 
 // pistas: una por hueco equivocado, con el número del hueco

@@ -107,20 +107,20 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 
   <section>
     <h2><span class="num">2</span>El diagrama de flujo</h2>
-    <p class="sub" style="margin-bottom:6px">Faltan el sorteo de las duraciones y las dos cuentas de la red. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
+    <p class="sub" style="margin-bottom:6px">Falta el diagrama entero, del inicio al cruce, con su bucle de réplicas. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 560 700" role="img" aria-label="Diagrama de flujo del edificio de la escuela de ingeniería">
       <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
       <!-- cajas fijas -->
-      <rect class="caja" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42">Fijar la semilla y N = 10.000</text>
-      <rect class="caja" x="150" y="340" width="220" height="44"/><text class="txt" x="260" y="362">Guardar la duración</text>
-      <polygon class="caja" points="260,416 360,456 260,496 160,456"/><text class="txt" x="260" y="456">¿Faltan réplicas?</text>
-      <rect class="caja" x="90" y="540" width="340" height="44"/><text class="txt" x="260" y="562">Resumen: media, P(≤ 36 meses), correlaciones</text>
-      <rect class="caja" x="90" y="620" width="340" height="44" rx="22"/><text class="txt" x="260" y="642">Cruce: el camino con los valores más probables</text>
       <!-- huecos -->
+      <g class="slot" data-slot="i"><rect class="hueco" x="150" y="20" width="220" height="44" rx="22"/><text class="txt" x="260" y="42"></text></g>
       <g class="slot" data-slot="s"><rect class="hueco" x="90" y="100" width="340" height="44"/><text class="txt" x="260" y="122"></text></g>
       <g class="slot" data-slot="f"><rect class="hueco" x="90" y="180" width="340" height="44"/><text class="txt" x="260" y="202"></text></g>
       <g class="slot" data-slot="t"><rect class="hueco" x="90" y="260" width="340" height="44"/><text class="txt" x="260" y="282"></text></g>
+      <g class="slot" data-slot="g"><rect class="hueco" x="150" y="340" width="220" height="44"/><text class="txt" x="260" y="362"></text></g>
+      <g class="slot" data-slot="q"><polygon class="hueco" points="260,416 360,456 260,496 160,456"/><text class="txt" x="260" y="456"></text></g>
+      <g class="slot" data-slot="m"><rect class="hueco" x="90" y="540" width="340" height="44"/><text class="txt" x="260" y="562"></text></g>
+      <g class="slot" data-slot="k"><rect class="hueco" x="90" y="620" width="340" height="44" rx="22"/><text class="txt" x="260" y="642"></text></g>
       <!-- flechas -->
       <path class="flecha" d="M260 64V100"/>
       <path class="flecha" d="M260 144V180"/>
@@ -151,8 +151,8 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 <script>
 const ID = "g5p10";
 const TITULO = "Guía 5 · Problema 10 · El edificio de la escuela de ingeniería";
-const SLOTS = ["s", "f", "t"];
-const PISTAS = {"s": "Cada actividad tiene su propia distribución (normal, uniforme, triangular o fija). Hay que sortear las diez en cada réplica.", "f": "Una actividad empieza cuando terminó la última de sus precedentes, no la primera. A ese fin se le suma su duración.", "t": "La obra termina cuando terminan las dos actividades finales, I y J: manda la que termina más tarde."};
+const SLOTS = ["i", "s", "f", "t", "g", "q", "m", "k"];
+const PISTAS = {"i": "Antes de la primera réplica hay que fijar lo que hace repetible la corrida y cuántas obras se simulan.", "s": "Cada actividad tiene su propia distribución (normal, uniforme, triangular o fija). Hay que sortear las diez en cada réplica.", "f": "Una actividad empieza cuando terminó la última de sus precedentes, no la primera. A ese fin se le suma su duración.", "t": "La obra termina cuando terminan las dos actividades finales, I y J: manda la que termina más tarde.", "g": "Cada obra tiene que dejarle al resumen lo que después se promedia y se correlaciona: ¿qué resultados de la obra mide el negocio?", "q": "Cada obra simulada termina en un guardado. ¿Qué se pregunta para saber si hay otra obra por simular?", "m": "El resumen tiene que responder la pregunta del plazo: el promedio, la probabilidad de cumplirlo y qué actividades mandan sobre el resultado.", "k": "Con todas las duraciones en su valor más probable la red se puede recorrer a mano. ¿Contra qué camino se cruza la simulación?"};
 const CASILLEROS = [
   ["decide", "Qué se decide", "la decisión del negocio y el número con el que se la juzga", "Qué plazo comprometer y qué tope darle al diseño. Se juzga por la probabilidad de terminar en 36 y en 37 meses, y por el plazo que se cumple con probabilidad 0,90."],
   ["entradas", "Entradas inciertas", "cada variable aleatoria, su distribución, su parámetro y cómo se sortea", "La duración de cada actividad: A normal (6; 1), B uniforme entre 6 y 10, C a I triangulares con su optimista, más probable y pesimista, y J fija en 5 meses. Se sortean las diez en cada réplica."],
@@ -164,21 +164,26 @@ const CASILLEROS = [
   ["experimento", "Experimento", "qué se repite por fuera de la réplica: barrido con la misma semilla, escenarios", "Comparar el diseño de 6 a 10 con el de 6 a 8 meses, y barrer el tope M del diseño de 6 a 10, de a 0,25, con la misma semilla. El tope más alto que cumple es 8 meses."]
 ];
 const FICHAS = [
+  ["i", "Fijar la semilla y N = 10.000"],
   ["s", "Sortear la duración de las 10 actividades"],
   ["f", "fin = máx(fin de precedentes) + duración"],
   ["t", "obra = máx(fin de I, fin de J)"],
+  ["g", "Guardar la duración"],
+  ["q", "¿Faltan réplicas?"],
+  ["m", "Resumen: media, P(≤ 36 meses), correlaciones"],
+  ["k", "Cruce: el camino con los valores más probables"],
   ["x1", "Sortear sólo la duración de la obra"],
   ["x2", "fin = mín(fin de precedentes) + duración"],
   ["x3", "obra = suma de las 10 duraciones"],
-  ["x4", "obra = fin de J"],
-  ["x5", "fin = duración de la actividad"]
+  ["x4", "Resumen: sólo la duración máxima"]
 ];
-const ORDEN = ["x4", "f", "x1", "t", "x5", "s", "x2", "x3"];
+const ORDEN = ["x3", "k", "f", "x4", "i", "q", "x1", "t", "g", "x2", "m", "s"];
 
 let estado = {nombre: "", legajo: "", txt: {}, slots: {}, verificado: false};
 try { const g = JSON.parse(localStorage.getItem(ID)); if (g) estado = Object.assign(estado, g); } catch (e) {}
 const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
 const texto = k => FICHAS.find(f => f[0] === k)[1];
+estado.slots = Object.fromEntries(Object.entries(estado.slots || {}).filter(([sl, k]) => SLOTS.includes(sl) && FICHAS.some(f => f[0] === k)));
 
 // identificación
 for (const k of ["nombre", "legajo"]) {
@@ -238,6 +243,11 @@ function pintarSlots(marcar) {
     const s = g.dataset.slot, h = g.querySelector(".hueco"), t = g.querySelector("text");
     const k = estado.slots[s];
     t.textContent = k ? texto(k) : "";
+    t.style.fontSize = "";
+    if (k) {
+      const caben = h.getBBox().width - 16, largo = t.getComputedTextLength();
+      if (largo > caben) t.style.fontSize = (15 * caben / largo) + "px";
+    }
     h.classList.toggle("lleno", !!k);
     h.classList.toggle("bien", !!marcar && k === s);
     h.classList.toggle("malo", !!marcar && !!k && k !== s);
@@ -262,7 +272,7 @@ document.getElementById("verificar").addEventListener("click", () => {
   guardar();
   m.className = "msj " + (buenos === SLOTS.length ? "ok" : "mal");
   m.textContent = buenos === SLOTS.length ? "Diagrama correcto." :
-    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá qué se sortea en cada réplica, cuándo puede empezar una actividad y cuándo termina la obra, y probá de nuevo.";
+    `${buenos} en verde, ${malos} en rojo` + (vacios ? `, ${vacios} sin completar` : "") + ". Pensá cómo arranca la corrida, qué se sortea en cada réplica, cuándo puede empezar una actividad, cuándo termina la obra y cómo se cierra la corrida, y probá de nuevo.";
 });
 
 // pistas: una por hueco equivocado, con el número del hueco
