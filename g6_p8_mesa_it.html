@@ -69,11 +69,38 @@ table.dem td,table.dem th{border:1px solid var(--linea);padding:4px 10px;text-al
 section ol{margin:6px 0 0;padding-left:1.4em}
 section ol li{margin:2px 0}
 @media (max-width:600px){svg{min-width:0}}
+
+/* TEMA marino UdeSA (#00529b, #003b6f, #122535, #7e9ebb) */
+:root{--fondo:#122535;--papel:#1a3349;--tinta:#e6edf3;--suave:#9fb4c7;--linea:#2a4a66;
+ --acento:#7e9ebb;--acento-suave:#1f3f5b;--ok:#8be0a1;--ok-suave:#173d2a;--mal:#f2a3a0;--mal-suave:#442125;
+ --sobre-acento:#122535;--amarillo:#3a3418;--borde-amarillo:#d9a400}
+body{background:var(--fondo);color:var(--tinta)}
+h1,h2{color:#fff}
+.num,button.accion,.ficha.elegida{color:var(--sobre-acento)}
+.bdt{fill:var(--sobre-acento)}
+input,textarea{background:#14283a;color:var(--tinta)}
+button.sec,button.ver{background:transparent;color:var(--acento)}
+svg .caja{fill:var(--papel);stroke:#9fb4c7}
+.txt{fill:var(--tinta)}
+.hueco{fill:#14283a}
+.hueco.lleno{fill:var(--acento-suave)}
+.hueco.bien{fill:var(--ok-suave)}
+.hueco.malo{stroke:#c9706b;fill:var(--mal-suave)}
+.hueco.sobre{fill:var(--amarillo)}
+.flecha{stroke:#9fb4c7}
+.pista{background:var(--amarillo);color:var(--tinta);border-left-color:var(--borde-amarillo)}
+a.caja:hover{background:#27506f}
+.ctx{background:#14283a}
+label.op{background:#14283a}
+@media print{
+ :root{--fondo:#f6f5f1;--papel:#fff;--tinta:#1f2328;--suave:#5b6370;--linea:#d5d2c8;--acento:#1d4e89;--acento-suave:#e3ecf7;--ok:#1f7a3a;--ok-suave:#e2f3e7;--mal:#b3261e;--mal-suave:#fbe5e3}
+ h1,h2{color:#1f2328} input,textarea{background:#fff;color:#1f2328}
+}
 </style>
 </head>
 <body>
 <main>
-  <a href="guia6.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Guía 6</a>
+  <a href="guia6.html" style="font-size:.9rem;color:#7e9ebb;text-decoration:none">← Guía 6</a>
   <h1>Guía 6 · Problema 8 · La mesa de ayuda IT</h1>
   <p class="sub">Ítem a): el diseño antes del código. Completá la plantilla y el diagrama, y al final guardate lo que hiciste en PDF.</p>
 
@@ -103,7 +130,7 @@ section ol li{margin:2px 0}
     <p class="sub" style="margin-bottom:6px">Faltan 14 cajas del diagrama, las numeradas. Los bucles de réplicas, demandas y dotaciones están por fuera de la corrida. Arrastrá cada ficha a su hueco, o tocá una ficha y después el hueco. Sobran fichas. Tocá un hueco lleno para vaciarlo.</p>
     <div class="banco" id="banco"></div>
     <svg id="diagrama" viewBox="0 0 760 1220" role="img" aria-label="Diagrama de flujo del barrido de la mesa de ayuda IT">
-      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#444"/></marker></defs>
+      <defs><marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9fb4c7"/></marker></defs>
       <g class="slot" data-slot="ini"><rect class="hueco" x="110" y="12" width="440" height="44" rx="22"/><text class="txt" x="330" y="34"></text></g>
       <rect class="caja" x="110" y="82" width="440" height="44"/><text class="txt" x="330" y="104">Tomar la dotación s siguiente</text>
       <g class="slot" data-slot="t1"><rect class="hueco" x="110" y="152" width="440" height="44"/><text class="txt" x="330" y="174"></text></g>
@@ -164,7 +191,7 @@ section ol li{margin:2px 0}
   </section>
 
   <div id="comprobante"></div>
-  <p class="volver-pie"><a href="guia6.html" style="color:#1d4e89;text-decoration:none">← Volver a la Guía 6</a></p>
+  <p class="volver-pie"><a href="guia6.html" style="color:#7e9ebb;text-decoration:none">← Volver a la Guía 6</a></p>
 </main>
 
 <script>

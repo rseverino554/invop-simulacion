@@ -18,9 +18,36 @@ a.caja:hover{background:#d3e2f4}
 .caja.off{color:var(--suave);background:transparent;border-style:dashed}
 .caja.off .num{background:var(--linea);color:var(--suave)}
 .caja.off .tit{font-weight:400}
+
+/* TEMA marino UdeSA (#00529b, #003b6f, #122535, #7e9ebb) */
+:root{--fondo:#122535;--papel:#1a3349;--tinta:#e6edf3;--suave:#9fb4c7;--linea:#2a4a66;
+ --acento:#7e9ebb;--acento-suave:#1f3f5b;--ok:#8be0a1;--ok-suave:#173d2a;--mal:#f2a3a0;--mal-suave:#442125;
+ --sobre-acento:#122535;--amarillo:#3a3418;--borde-amarillo:#d9a400}
+body{background:var(--fondo);color:var(--tinta)}
+h1,h2{color:#fff}
+.num,button.accion,.ficha.elegida{color:var(--sobre-acento)}
+.bdt{fill:var(--sobre-acento)}
+input,textarea{background:#14283a;color:var(--tinta)}
+button.sec,button.ver{background:transparent;color:var(--acento)}
+svg .caja{fill:var(--papel);stroke:#9fb4c7}
+.txt{fill:var(--tinta)}
+.hueco{fill:#14283a}
+.hueco.lleno{fill:var(--acento-suave)}
+.hueco.bien{fill:var(--ok-suave)}
+.hueco.malo{stroke:#c9706b;fill:var(--mal-suave)}
+.hueco.sobre{fill:var(--amarillo)}
+.flecha{stroke:#9fb4c7}
+.pista{background:var(--amarillo);color:var(--tinta);border-left-color:var(--borde-amarillo)}
+a.caja:hover{background:#27506f}
+.ctx{background:#14283a}
+label.op{background:#14283a}
+@media print{
+ :root{--fondo:#f6f5f1;--papel:#fff;--tinta:#1f2328;--suave:#5b6370;--linea:#d5d2c8;--acento:#1d4e89;--acento-suave:#e3ecf7;--ok:#1f7a3a;--ok-suave:#e2f3e7;--mal:#b3261e;--mal-suave:#fbe5e3}
+ h1,h2{color:#1f2328} input,textarea{background:#fff;color:#1f2328}
+}
 </style></head>
 <body><main>
-  <a href="index.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Todas las guías</a>
+  <a href="index.html" style="font-size:.9rem;color:#7e9ebb;text-decoration:none">← Todas las guías</a>
   <p class="materia" style="margin-top:16px">Investigación Operativa · Universidad de San Andrés</p>
   <h1>Guía 6: Simulación por próximo evento</h1>
   <p class="sub">Cátedra Severino</p>
