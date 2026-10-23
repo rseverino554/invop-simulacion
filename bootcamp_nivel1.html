@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code boot camp · Nivel 1</title>
+<style>
+:root{
+  --fondo:#f6f5f1; --papel:#ffffff; --tinta:#1f2328; --suave:#5b6370; --linea:#d5d2c8;
+  --acento:#1d4e89; --acento-suave:#e3ecf7; --ok:#1f7a3a; --ok-suave:#e2f3e7; --mal:#b3261e; --mal-suave:#fbe5e3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.45rem;margin:0 0 4px}
+h2{font-size:1.05rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{display:inline-grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:var(--acento);color:#fff;font-size:.9rem}
+.tema{color:var(--suave);font-weight:400;font-size:.9rem}
+.sub{color:var(--suave);margin:0 0 20px}
+section{background:var(--papel);border:1px solid var(--linea);border-radius:10px;padding:18px 20px;margin:0 0 16px}
+section.bien{border-color:var(--ok)}
+section.mal{border-color:#e3a09b}
+.frase{margin:0 0 10px}
+pre{margin:0;font:13.5px/1.45 ui-monospace,SFMono-Regular,Consolas,Menlo,monospace;white-space:pre;overflow-x:auto}
+.ctx{background:#f1f0ea;border:1px solid var(--linea);border-radius:6px;padding:8px 10px;margin:0 0 10px}
+.ctx-t{font-size:.8rem;color:var(--suave);margin:0 0 4px}
+.opciones{display:grid;gap:8px}
+label.op{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border:1px solid var(--linea);border-radius:8px;background:#fff;cursor:pointer}
+label.op:hover{border-color:var(--acento)}
+label.op input{margin-top:4px;flex:none}
+label.op.elegida{border-color:var(--acento);background:var(--acento-suave)}
+label.op.bien{border-color:var(--ok);background:var(--ok-suave)}
+label.op.mal{border-color:#e3a09b;background:var(--mal-suave)}
+.pista{margin:10px 0 0;padding:8px 12px;background:#fff6d6;border-left:4px solid #d9a400;border-radius:0 6px 6px 0;font-size:.92rem}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button.accion{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:0;background:var(--acento);color:#fff;cursor:pointer}
+button.sec{background:#fff;color:var(--acento);border:1px solid var(--acento)}
+.msj{font-size:.95rem}
+.msj.ok{color:var(--ok)} .msj.mal{color:var(--mal)}
+</style>
+</head>
+<body>
+<main>
+  <a href="bootcamp.html" style="font-size:.9rem;color:#1d4e89;text-decoration:none">← Code boot camp</a>
+  <h1>Code boot camp · Nivel 1</h1>
+  <p class="sub">Cada ejercicio describe en palabras lo que hay que calcular. Elegí el bloque de código que lo hace. Al final tocá Verificar: te marca cuáles están bien y, en los que no, te da una pista sobre por qué ese bloque falla.</p>
+
+  <div id="ejercicios"></div>
+
+  <section>
+    <div class="fila">
+      <button class="accion" id="verificar">Verificar</button>
+      <button class="accion sec" id="reiniciar">Empezar de nuevo</button>
+      <span class="msj" id="msj"></span>
+    </div>
+  </section>
+  <p><a href="bootcamp.html" style="color:#1d4e89;text-decoration:none">← Volver al Code boot camp</a></p>
+</main>
+
+<script>
+const ID = "bootcamp_n1";
+const EJ = [{"tema": "Semilla", "frase": "Simular 3 réplicas, cada una con un sorteo de una normal estándar, de modo que las tres salgan distintas entre sí y la corrida se pueda repetir exactamente.", "ctx": "", "opciones": [{"codigo": "for i in range(3):\n    rng = np.random.default_rng(7)\n    print(rng.normal(0, 1))", "ok": false, "pista": "El generador se crea adentro del for con la misma semilla: cada vuelta arranca la secuencia de nuevo y las tres réplicas salen iguales."}, {"codigo": "for i in range(3):\n    print(np.random.default_rng().normal(0, 1))", "ok": false, "pista": "Sin semilla, cada generador arranca desde cualquier lado: las réplicas salen distintas, pero la corrida no se puede repetir."}, {"codigo": "rng = np.random.default_rng(7)\nfor i in range(3):\n    print(rng.normal(0, 1))", "ok": true, "pista": ""}]}, {"tema": "Variable discreta", "frase": "Sortear 1.000 demandas de una tabla: el arreglo valores con sus probabilidades probas.", "ctx": "rng = np.random.default_rng(7)\nvalores = np.array([0, 1000, 2000, 3000])\nprobas = np.array([0.1, 0.2, 0.3, 0.4])", "opciones": [{"codigo": "rng.choice(valores, 1000, probas)", "ok": false, "pista": "Las probabilidades se pasan con p=, por nombre. Escritas sin nombre, ocupan el lugar de otro argumento (replace) y no son las probabilidades."}, {"codigo": "rng.choice(valores, size=1000, p=probas)", "ok": true, "pista": ""}, {"codigo": "rng.choice(probas, size=1000, p=valores)", "ok": false, "pista": "Están cruzados: se sortea entre los valores, y las probabilidades van en p. Además p tiene que sumar 1."}, {"codigo": "rng.normal(valores, probas, size=1000)", "ok": false, "pista": "La normal es continua: no sortea entre valores puntuales con sus probabilidades. Para una tabla discreta es rng.choice."}]}, {"tema": "Normal", "frase": "El precio de cierre tiene media 7.300 y varianza 160.000. Sortear 1.000 precios.", "ctx": "rng = np.random.default_rng(7)", "opciones": [{"codigo": "rng.normal(7300, 160000, size=1000)", "ok": false, "pista": "El segundo argumento es el desvío, no la varianza. Con varianza 160.000 el desvío es la raíz: 400. Así los precios se dispersan 400 veces más de lo debido."}, {"codigo": "rng.normal(400, 7300, size=1000)", "ok": false, "pista": "El orden es media y después desvío. Acá la media quedó en 400 y el desvío en 7.300: los precios salen cualquier cosa, hasta negativos."}, {"codigo": "rng.normal(7300, 400, size=1000)", "ok": true, "pista": ""}, {"codigo": "rng.uniform(7300, 400, size=1000)", "ok": false, "pista": "La uniforme reparte parejo entre un mínimo y un máximo, no es una campana con media y desvío. Acá además da error, porque el mínimo (7.300) quedó por encima del máximo (400)."}]}, {"tema": "Exponencial", "frase": "Un servicio dura en promedio 0,8 horas (atiende 1,25 trabajos por hora). Sortear 1.000 duraciones.", "ctx": "rng = np.random.default_rng(7)", "opciones": [{"codigo": "rng.exponential(1.25, size=1000)", "ok": false, "pista": "1,25 es la tasa, y rng.exponential recibe la media del tiempo, que es 1 / 1,25 = 0,8. Con 1,25 las duraciones salen más largas."}, {"codigo": "rng.uniform(0, 0.8, size=1000)", "ok": false, "pista": "La uniforme entre 0 y 0,8 tiene media 0,4 y no tiene cola de valores largos. No es una exponencial."}, {"codigo": "rng.poisson(0.8, size=1000)", "ok": false, "pista": "La Poisson cuenta eventos y devuelve enteros. Una duración es un tiempo continuo."}, {"codigo": "rng.exponential(0.8, size=1000)", "ok": true, "pista": ""}]}, {"tema": "Comparar posición por posición", "frase": "Con la demanda de cada réplica en un arreglo, calcular lo que se vende: el menor entre la demanda y el inventario, réplica por réplica.", "ctx": "demanda = np.array([1000, 4000, 6000])\ninventario = 3500", "opciones": [{"codigo": "min(demanda, inventario)", "ok": false, "pista": "El min de Python compara objetos enteros: con un arreglo y un número da error. Para comparar posición por posición es np.minimum."}, {"codigo": "np.min(demanda, inventario)", "ok": false, "pista": "np.min resume un solo arreglo y su segundo argumento es el eje, no otro valor a comparar."}, {"codigo": "np.maximum(demanda, inventario)", "ok": false, "pista": "Eso se queda con el mayor de cada par. Lo que se vende es el menor."}, {"codigo": "np.minimum(demanda, inventario)", "ok": true, "pista": ""}]}, {"tema": "Una probabilidad", "frase": "Estimar la probabilidad de perder plata como la fracción de réplicas cuya ganancia es negativa.", "ctx": "ganancia = np.array([-200, 150, 300, -50, 400])", "opciones": [{"codigo": "np.mean(ganancia) < 0", "ok": false, "pista": "Eso pregunta si el promedio de las ganancias es negativo, y da verdadero o falso. No cuenta réplicas."}, {"codigo": "np.sum(ganancia < 0)", "ok": false, "pista": "Cuenta cuántas réplicas pierden (2), no qué fracción son. Falta dividir por las réplicas, o usar np.mean."}, {"codigo": "np.mean(ganancia < 0)", "ok": true, "pista": ""}, {"codigo": "np.where(ganancia < 0)", "ok": false, "pista": "Devuelve las posiciones de las réplicas que pierden, envueltas en una tupla, no una probabilidad."}]}, {"tema": "Leer un barrido", "frase": "Un barrido dio una ganancia promedio para cada oferta de la grilla. Obtener la oferta que dio la mayor ganancia.", "ctx": "ofertas = np.array([500, 520, 540, 560])\nganancia = np.array([30.1, 48.5, 47.9, 41.0])", "opciones": [{"codigo": "np.argmax(ganancia)", "ok": false, "pista": "Devuelve la posición del máximo (1), no la oferta. Falta usarla como índice en la grilla."}, {"codigo": "ofertas[np.max(ganancia)]", "ok": false, "pista": "np.max devuelve la ganancia máxima (48,5), y un valor así no sirve de índice. Hace falta la posición, que da argmax."}, {"codigo": "ofertas[np.argmin(ganancia)]", "ok": false, "pista": "argmin busca la posición del mínimo: esto da la peor oferta, no la mejor."}, {"codigo": "ofertas[np.argmax(ganancia)]", "ok": true, "pista": ""}]}, {"tema": "Los ejes", "frase": "Una matriz tiene una fila por réplica y una columna por mes. Calcular el total del año de cada réplica.", "ctx": "rng = np.random.default_rng(7)\ningresos = rng.normal(100, 10, size=(4, 12))", "opciones": [{"codigo": "ingresos.sum(axis=0)", "ok": false, "pista": "El eje que se pasa es el que desaparece. Con axis=0 desaparecen las filas: queda un total por mes (12 números), no uno por réplica."}, {"codigo": "ingresos.sum()", "ok": false, "pista": "Suma todo junto y devuelve un solo número, sin distinguir réplicas."}, {"codigo": "ingresos.sum(12)", "ok": false, "pista": "El 12 se interpreta como el número de eje, y la matriz tiene sólo dos ejes: da error. Los meses son 12 columnas, no un eje."}, {"codigo": "ingresos.sum(axis=1)", "ok": true, "pista": ""}]}, {"tema": "La fila de espera", "frase": "Atender a la primera de la fila (la que más espera) y calcular cuánto esperó, sabiendo que ahora es t. La fila guarda la hora de llegada de cada una.", "ctx": "fila = [0.5, 1.2, 1.4]\nt = 2.0", "opciones": [{"codigo": "espera = t - fila.pop()", "ok": false, "pista": "pop() sin argumento saca la última, la que acaba de llegar. La primera es pop(0): FIFO."}, {"codigo": "espera = fila[0] - t", "ok": false, "pista": "No saca a nadie de la fila, y la resta está al revés: da negativo. La espera es t menos la hora de llegada."}, {"codigo": "espera = t - fila.append(0)", "ok": false, "pista": "append agrega un elemento al final y no devuelve nada. Para sacar y obtener el primero es pop(0)."}, {"codigo": "espera = t - fila.pop(0)", "ok": true, "pista": ""}]}, {"tema": "Graficar un estado", "frase": "Graficar cuántas campañas hay en la mesa a lo largo del tiempo, sabiendo que el estado se mantiene constante entre un evento y el siguiente. t son los instantes de los eventos y n el estado desde cada uno.", "ctx": "t = np.array([0.0, 0.5, 1.2, 1.4, 2.1, 3.0])\nn = np.array([0, 1, 2, 1, 0, 1])", "opciones": [{"codigo": "a.plot(t, n)", "ok": false, "pista": "plot une los puntos con rectas e inventa estados intermedios que nunca existieron (entre 0 y 1 campañas, por ejemplo)."}, {"codigo": "a.bar(t, n)", "ok": false, "pista": "Dibuja una barra por instante, angosta, y no muestra que el estado dura hasta el próximo evento."}, {"codigo": "a.step(t, n, where=\"post\")", "ok": true, "pista": ""}, {"codigo": "a.hist(t, n)", "ok": false, "pista": "hist reparte valores en barras para mostrar una distribución, y su segundo argumento es la cantidad de barras: acá da error. No dibuja un estado en el tiempo."}]}];
+
+let estado = {resp: {}, verificado: false};
+try { const g = JSON.parse(localStorage.getItem(ID)); if (g && g.resp) estado = Object.assign(estado, g); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(ID, JSON.stringify(estado)); } catch (e) {} };
+
+const cont = document.getElementById("ejercicios");
+const tarjetas = [];
+EJ.forEach((e, i) => {
+  const s = document.createElement("section");
+  const h = document.createElement("h2");
+  h.innerHTML = '<span class="num"></span><span></span>';
+  h.children[0].textContent = i + 1;
+  h.children[1].innerHTML = 'Ejercicio ' + (i + 1) + ' <span class="tema"></span>';
+  h.querySelector(".tema").textContent = "· " + e.tema;
+  s.appendChild(h);
+  const p = document.createElement("p");
+  p.className = "frase";
+  p.textContent = e.frase;
+  s.appendChild(p);
+  if (e.ctx) {
+    const c = document.createElement("div");
+    c.className = "ctx";
+    c.innerHTML = '<p class="ctx-t">Ya está definido:</p><pre></pre>';
+    c.querySelector("pre").textContent = e.ctx;
+    s.appendChild(c);
+  }
+  const ops = document.createElement("div");
+  ops.className = "opciones";
+  e.opciones.forEach((o, j) => {
+    const l = document.createElement("label");
+    l.className = "op";
+    l.innerHTML = '<input type="radio" name="ej' + i + '"><pre></pre>';
+    l.querySelector("pre").textContent = o.codigo;
+    const r = l.querySelector("input");
+    r.checked = estado.resp[i] === j;
+    r.addEventListener("change", () => {
+      estado.resp[i] = j;
+      estado.verificado = false;
+      guardar();
+      limpiar(i);
+      pintarElegidas();
+      document.getElementById("msj").textContent = "";
+    });
+    ops.appendChild(l);
+  });
+  s.appendChild(ops);
+  const pista = document.createElement("div");
+  pista.className = "pista";
+  pista.hidden = true;
+  s.appendChild(pista);
+  cont.appendChild(s);
+  tarjetas.push({s, ops, pista});
+});
+
+function limpiar(i) {
+  const t = tarjetas[i];
+  t.s.classList.remove("bien", "mal");
+  t.ops.querySelectorAll("label").forEach(l => l.classList.remove("bien", "mal"));
+  t.pista.hidden = true;
+}
+function pintarElegidas() {
+  tarjetas.forEach((t, i) => t.ops.querySelectorAll("label").forEach((l, j) => l.classList.toggle("elegida", estado.resp[i] === j && !l.classList.contains("bien") && !l.classList.contains("mal"))));
+}
+function verificar() {
+  let bien = 0, vacias = 0;
+  EJ.forEach((e, i) => {
+    limpiar(i);
+    const j = estado.resp[i], t = tarjetas[i];
+    if (j === undefined) { vacias++; return; }
+    const lab = t.ops.querySelectorAll("label")[j];
+    lab.classList.remove("elegida");
+    if (e.opciones[j].ok) {
+      bien++; t.s.classList.add("bien"); lab.classList.add("bien");
+    } else {
+      t.s.classList.add("mal"); lab.classList.add("mal");
+      t.pista.textContent = "Pista: " + e.opciones[j].pista;
+      t.pista.hidden = false;
+    }
+  });
+  estado.verificado = true; guardar();
+  const m = document.getElementById("msj");
+  const mal = EJ.length - bien - vacias;
+  m.className = "msj " + (bien === EJ.length ? "ok" : "mal");
+  m.textContent = bien === EJ.length ? "Los " + EJ.length + " ejercicios están bien." :
+    bien + " bien, " + mal + " en rojo" + (vacias ? ", " + vacias + " sin responder" : "") + ". Leé la pista de los rojos, cambiá la respuesta y volvé a verificar.";
+}
+document.getElementById("verificar").addEventListener("click", verificar);
+document.getElementById("reiniciar").addEventListener("click", () => {
+  estado = {resp: {}, verificado: false}; guardar();
+  document.querySelectorAll("input[type=radio]").forEach(r => r.checked = false);
+  EJ.forEach((e, i) => limpiar(i));
+  pintarElegidas();
+  document.getElementById("msj").textContent = "";
+});
+pintarElegidas();
+if (estado.verificado) verificar();
+</script>
+</body>
+</html>
